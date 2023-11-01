@@ -1,380 +1,232 @@
 //@ts-nocheck
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createRef, useEffect, useState, useRef } from 'react'
 import {
-  View, Text, FlatList, StyleSheet, Image, ScrollView, Dimensions, TouchableOpacity, TouchableNativeFeedback,
-  StatusBar, ActivityIndicator, Animated, SafeAreaView, Modal
+  View, Text, FlatList, StyleSheet, Image, ScrollView,
+  Dimensions, TouchableOpacity, SafeAreaView,
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native'
 import { scaledSize } from '../../helper/util/Utilities';
-import { COLORS, Fonts } from '../../utilits/GlobalAssets';
+import { Theme } from '../../utilits/GlobalColors';
 import { Searchbar } from "react-native-paper"
 import { styles } from './dashboardStyle'
-import Icon from "react-native-vector-icons/FontAwesome";
-import {
-  black, bulb, cal, cement, drawerMenu, dresses, flash, girl, green, king, locationPin,
-  mobile, slide1, slide2, suite, superGirl, swipe4, top, watch, watch2, searchIcon, arrowLeftIcon
-} from '../../utilits/GlobalImages';
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllProductsInitiate, getTopSoldProductsInitiate } from './DashboardActions';
-import { FlatListSlider } from 'react-native-flatlist-slider';
-import LinearGradient from 'react-native-linear-gradient';
-import { useRoute } from '@react-navigation/native';
-import { getData, getTopSoldProducts, searchProduct, } from './DashBoardSlice';
-import { clearOrderState } from '../orderDetails/OrderSlice';
-import { getProductById, makeProductFlagFalse } from '../productList/ProductsSlice';
-
+import { getAllProductsInitiate } from './DashboardActions';
+import {
+  filterIcon, locationPin, mainMenu, profile, searchPin,
+  bgImage,
+  house1, house2, heart1, heart2, drawer, mapIcon, downArrow, bell,
+  car, apartment, mcycle, suitcase, smartp, locationView, sliderImage, house
+} from '../../utilits/GlobalImages';
+import { useIsFocused } from "@react-navigation/core";
+import Carousel from 'react-native-reanimated-carousel';
 
 const width = Dimensions.get('window').width;
 
 
-const images = [
-  {
-    image: slide1,
-    desc: 'Silent Waters in the mountains in midst of Himilayas',
-  },
-  {
-    image: slide2,
-    desc:
-      'Red fort in India New Delhi is a magnificient masterpeiece of humans',
-  },
-]
 
-
-
-
-
-interface MyProps {
-  search: any;
-  //filterTabs:any;
-  modalData: any;
-  screenPosition: any;
-  productsData: any;
-  scrollLoad: boolean;
-
-
-};
-
-interface MyState {
-  search: any;
-  filterTabs: any;
-  modalData: any
-  navigation: any
-
-};
-
-const utilities = [
-  { id: "1", isSelected: '3 minutes', name: 'Top Categories', image: top },
-  { id: "2", isSelected: '15 minutes', name: 'Brands', image: bulb },
-  { id: "3", isSelected: '4 minutes', name: 'Top Sellers', image: king },
-  { id: "4", isSelected: '20 minutes', name: 'Todays Deal', image: cal },
-  { id: "5", isSelected: '18 minutes', name: 'Flash Deal', image: flash }
-]
-
-const categories = [
-  { id: "1", isSelected: '3 minutes', name: 'Clothing & Fashion', image: superGirl, price: '$25.00', },
-  { id: "2", isSelected: '15 minutes', name: 'Mobile Phones', image: mobile, price: '$25.00', },
-  { id: "3", isSelected: '4 minutes', name: 'Women Watch', image: watch, price: '$25.00', },
-  { id: "4", isSelected: '20 minutes', name: 'Women Dress', image: girl, price: '$25.00', },
-]
-
-
-
-const products = [
-  { id: "1", price: '25.00', name: 'Apple Watch', qty: 1, image: watch2 },
-  { id: "2", price: '150.00', name: 'black Suite', qty: 1, image: suite },
-  {
-    id: "3", price: '1200.00', name: 'Iphone X', qty: 1, image: mobile, ram: 4, varient: [
-      {
-        ram: 4,
-        colors: ['red'],
-        isSelected: true,
-        price: '1200.00'
-      },
-      {
-        ram: 6,
-        colors: ['purple'],
-        isSelected: false,
-        price: '1500.00'
-      },
-      {
-        ram: 8,
-        colors: ['green'],
-        isSelected: false,
-        price: '1800.00'
-      }
-    ]
-  },
-  { id: "4", price: '90.00', name: 'Black Dress', qty: 1, image: dresses },
-  { id: "5", price: '200.00', name: 'Olive Suite', qty: 1, image: green },
-  { id: "6", price: '180.00', name: 'Casual Suite', qty: 1, image: cement },
-]
-
-
-
-const extraProducts = [
-  { id: "4", price: '90.00', name: 'Black Dress', image: dresses },
-  { id: "1", price: '25.00', name: 'Apple Watch', image: watch2 },
-  { id: "5", price: '200.00', name: 'Olive Suite', image: green },
-  { id: "2", price: '150.00', name: 'black Suite', image: suite },
-  { id: "6", price: '180.00', name: 'Casual Suite', image: cement },
-  { id: "3", price: '120.00', name: 'Blazzer Men', image: black },
-]
-
-
-
-export default Dashboard = ({ navigation }) => {
+const DashboardScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState('')
-  const [searchResult, setSearchResult] = useState([])
-
-  const [modalData, setModalData] = useState({})
-  const [productsData, setProductsData] = useState(products)
-  const [screenPosition, setPosition] = useState(0)
-  const [scrollLoad, setLoad] = useState(false)
+  const [modalData, setModalData] = useState([{ first_name: 'Dashboard', last_name: 'Dashboard', id: 2, image: house }, { first_name: 'Dashboard', last_name: 'Dashboard', id: 2, image: house }])
+  const [isLoading, setIsLoading] = useState(false)
+  const [cartItems, setItems] = useState(false)
+  const [COLORS, setCOLORS] = useState('Blue')
+  const [scrollLoad, setScrollLoad] = useState(false)
+  const [colorLoad, setColorLoad] = useState(false)
+  const [pageNumber, setPage] = useState(1)
   const dispatch = useDispatch();
-  const route = useRoute();
-  const DashboardReducer = useSelector((state: any) => state.DashBoardSlice)
-  const productDetails = useSelector((state: any) => state.ProductsSlice)
-
+  const productsResponce = useSelector((state: any) => state.DashboardReducer)
+  const LoadProductsResponce = useSelector((state: any) => state.DashboardReducer)
+  const isFocused = useIsFocused();
+  const value = async () => {
+    let values = await Theme()
+    setCOLORS(values)
+    setTimeout(() => {
+      setColorLoad(false)
+    }, 1500);
+  }
 
   useEffect(() => {
-    console.log('productDetails-------', DashboardReducer);
+    setColorLoad(true)
+    value()
 
-    if(productDetails.isSingleProduct)
-    {
-      navigation.navigate('searchProductDetails',{data:productDetails.singleProductDetails})
-      dispatch(makeProductFlagFalse())
 
-    }
 
-  })
+    setIsLoading(false)
+    setIsLoading(false)
+    setScrollLoad(false)
 
-  const renderItem = (item: any, index: number) => {
-    return (<TouchableOpacity onPress={() => { navigation.navigate('ProductDetails', { data: item }) }}>
-      <View style={[styles.productView, { alignItems: 'center', width: width - scaledSize(230), alignSelf: 'center' }]}>
-        <Image resizeMethod='resize' resizeMode='contain' source={item.image} style={styles.productImage} />
-        <Text style={styles.productName}>
-          {item.name}</Text>
-        <Text style={styles.productPrice}>
-          $ {item.price}</Text>
+  }, [productsResponce, isFocused])
+
+
+
+
+  const renderItem3 = (item: any, index: number) => {
+    return (
+      <View style={{ backgroundColor: COLORS.white, elevation: 5, height: scaledSize(260), paddingTop: scaledSize(6), borderRadius: 4, marginRight: scaledSize(5), marginBottom: scaledSize(8), borderWidth: 1, borderColor: COLORS.borderBottomColor }}>
+        <TouchableOpacity onPress={() => { navigation.navigate('ProductDetails', { data: item }) }} style={styles.productView}>
+
+          <Image source={index % 2 == 0 ? house : house} resizeMethod='resize'
+            resizeMode='cover' style={{ width: '100%', height: scaledSize(140), borderRadius: scaledSize(2) }} />
+          <TouchableOpacity onPress={() => {
+            cartItems ? setItems(false) : setItems(true)
+
+          }} style={{ position: 'absolute', right: scaledSize(15), top: scaledSize(10) }}>
+            <Image source={cartItems ? heart2 : heart1} style={{ width: scaledSize(20), height: scaledSize(20) }} />
+          </TouchableOpacity>
+
+          <View style={{ marginLeft: scaledSize(20) }}>
+
+            <Text style={[styles.card1Text, { fontSize: scaledSize(17), color: COLORS.themeBlue }]}>&#x20B9; {`${parseFloat(5436500 * item.id).toFixed(0)}`}</Text>
+            <Text style={[styles.card1Text, { fontSize: scaledSize(14), top: scaledSize(13), color: COLORS.themeBlue }]}>{`2 - BHK FLAT, ${item.first_name.slice(0, 6) + '...'}`}</Text>
+            <Text style={[styles.card1Text, { fontSize: scaledSize(14), top: scaledSize(16), color: COLORS.themeBlue }]}>{`2 Bds - 2 Ba - ${123 * item.id} ft2`}</Text>
+            <Image source={mapIcon} resizeMode='contain' style={[styles.card1LocationPin]} />
+            <Text style={{ position: 'absolute', fontSize: scaledSize(12), color: COLORS.grey, bottom: scaledSize(-42), left: scaledSize(7), letterSpacing: .5 }}>{`${(item.last_name + ' Nagar Society').slice(0, 14) + '....'}`}</Text>
+          </View>
+
+        </TouchableOpacity>
       </View>
-
-    </TouchableOpacity>
     )
   }
 
-  const getProductDetailsHandler=(id)=>{
-    dispatch(getProductById({'productId':id}))
+  const onEndData = async (index: any) => {
+    //if(pageNumber > 2) return
+    setPage(pageNumber + 1)
+    setScrollLoad(true)
+    dispatch(getAllProductsInitiate(pageNumber))
+    console.log(index, "true")
   }
 
-  const renderSearchedProduct=(item)=>{
-    return <TouchableOpacity style={styles.searchStyle}
-    onPress={()=> getProductDetailsHandler(item.id)}>
-   <View style={styles.searchBarView}>
-  <Text style={styles.searchResulText}>{item.name}</Text>
-  </View>
-  </TouchableOpacity>
-  }
-
-  searchProductHandler = value => {
-    setSearch(value)
-    dispatch(searchProduct(
-      { 'keyword': value }
-    ))
+  const footerLoader = () => {
+    if (!scrollLoad) return null
+    return (
+      <View style={{ paddingVertical: scaledSize(50) }}>
+        <ActivityIndicator color='red' style={{ bottom: scaledSize(40) }} animating size={'large'} />
+      </View>
+    )
   }
 
   return (
-    <SafeAreaView style={[styles.mainView]}>
-      <StatusBar backgroundColor={'#88dbe3'} />
-      <View style={[styles.searchBarView,
-      {
-        height: scaledSize(80), width: '100%',
-        justifyContent: 'center',
-      }]}>
-        {/************************ Search modal window start *********** */}
+    <SafeAreaView style={styles.mainView}>
 
-        {/************************ Search modal window End *********** */}
-        <LinearGradient colors={['#88dbe3', '#88dbe3', '#74d5bb']} style={[styles.linearGradient, {
-          flexDirection: 'row',
-          justifyContent: 'flex-start', alignItems: 'center', height: scaledSize(120),
-          width: '100%'
-        }]} >
-          {route.name == 'Home' ? <TouchableOpacity
-            onPress={() => alert('working on')}
-            // onPress={() => navigation.openDrawer()}
-            style={{ right: scaledSize(10) }}
-
-          >
-            <Image source={drawerMenu} style={[,
-              {
-                tintColor: 'white',
-                height: scaledSize(30),
-                width: scaledSize(30)
-              }]} resizeMode='contain' />
-          </TouchableOpacity> :
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={{ bottom: scaledSize(6), right: 10 }}
-            >
-              <Image source={arrowLeftIcon} style={[, { tintColor: 'white', height: 30, width: 30 }]} resizeMode='contain' />
-            </TouchableOpacity>}
-          <Searchbar
-            //lightTheme
-            //searchIcon={{ size: 20, color: COLORS.borderBottomColor }}
-            //disableFullscreenUI
-            placeholder="Search.."
-            placeholderTextColor={COLORS.placeHolderTextColor}
-            style={{
-              width: scaledSize(280),
-              height: scaledSize(44),
-              borderRadius: scaledSize(6),
-
-            }}
-            inputStyle={{ fontSize: scaledSize(18) }}
-            //containerStyle={styles.searchContainerStyle}
-            //inputContainerStyle={styles.searchInputStyle}
-            // onIconPress={()=>navigation.navigate('ProductList')}
-            // onKeyPress={()=>navigation.navigate('ProductList')}
-            onChangeText={value => searchProductHandler(value)}
-            value={search}
-            icon={()=><Image source={searchIcon} style={{height:20,width:20}} resizeMode='contain' />}
+      <View style={{ flex: 1 }}>
+        <View style={{ backgroundColor: COLORS.lightGreen, borderBottomWidth: 2, borderBottomColor: '#eff2f3' }}>
+            <View style={styles.dashboardView2}>
 
 
-          />
+              <Image style={{ height: scaledSize(22), width: scaledSize(22), position: 'absolute', left: scaledSize(0), top: scaledSize(27) }} resizeMode='contain' source={mapIcon} />
+              <Text style={[styles.dashboardAddressText, {
+                left: scaledSize(30),
+                top: scaledSize(29), color: COLORS.themeBlue
+              }]}>WashingTon, New York</Text>
 
-        </LinearGradient>
-      </View>
+            </View>
+            <TouchableOpacity style={{ position: 'absolute', right: scaledSize(20), top: scaledSize(25) }} onPress={async () => { navigation.navigate('Account') }}>
+              <Image source={profile}
+                resizeMode='contain'
+                style={styles.dashboardProfileImage}
+              />
+            </TouchableOpacity>
 
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-      >
-        {/* --------------------------------------------- Top categories view start---------------------------------------------- */}
-        <View style={styles.scrollViewOptions}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {utilities.map((value: any, index: any) => {
-              return <View style={{ flex: 1 }} key={index}>
-                <TouchableOpacity onPress={() => {
-                  navigation.navigate('CategoryDetails', { data: value })
-                }}>
-                  <View style={[styles.screen1Border9, { alignItems: 'center' }]}>
-                    <Image resizeMethod='resize' resizeMode='contain' source={value.image} style={styles.scrollViewImageSize} />
-                  </View>
-                  <Text style={styles.screen1Border8}>
-                    {value.name}</Text>
-                </TouchableOpacity>
+          <View style={styles.searchBarView}>
+            <Searchbar
+              placeholder="Find Cars, Mobile Phones.."
+              placeholderTextColor={COLORS.placeHolderTextColor}
+              style={{
+                width: width - scaledSize(60), marginTop: scaledSize(75),
+                marginBottom: scaledSize(-10), borderRadius: scaledSize(6), marginLeft: scaledSize(30)
+              }}
+              inputStyle={{ fontSize: scaledSize(14), left: scaledSize(-10) }}
+              onChangeText={(value: any) => setSearch(value)}
+              value={search}
+            />
 
-              </View>
+          </View>
 
-            })}
-          </ScrollView>
+          <Text>{''}</Text>
+          <Text>{''}</Text>
         </View>
 
-        {/* --------------------------------------------- Top categories view End----------------------------------------- */}
 
-        {/* --------------------------------------------- Slider  View Start---------------------------------------------- */}
 
-        <View style={{ marginBottom: scaledSize(10), marginTop: scaledSize(22), }}>
-          <FlatListSlider
-            data={images}
-            local
-            width={width - scaledSize(30)}
-            height={scaledSize(130)}
-            timer={4500}
-            separatorWidth={30}
+
+
+
+        {/* <View style={[ {  backgroundColor: '#fff', padding: scaledSize(5) }]}>
+            <TouchableOpacity onPress={() => navigation.navigate('AllList')} 
+            style={{ right: 10, position: 'absolute', margin: scaledSize(8), top: scaledSize(-2), zIndex: 1 }}>
+              <Text style={{ color: COLORS.themeBlue }}>View All</Text>
+            </TouchableOpacity>
+          </View> */}
+
+
+
+
+        {/* <View style={{ marginTop: scaledSize(-10), alignItems: 'center', width: width, backgroundColor: COLORS.white }}>
+
+            <View style={{ backgroundColor: COLORS.white }}>
+              <Text style={{ left: scaledSize(10), color: COLORS.themeBlue, fontSize: scaledSize(19), top: scaledSize(10), marginBottom: scaledSize(30) }}>Fresh recommendations</Text>
+              <FlatList
+                data={modalData}
+                //extraData={modalData}
+                numColumns={2}
+                //nestedScrollEnabled={false}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item, index) => 'key' + index}
+                renderItem={({ item, index }) => renderItem3(item, index)}
+                onEndReachedThreshold={0.5}
+                //onEndReached={(index)=>onEndData(index)}
+                ListFooterComponent={() => footerLoader()}
+              />
+            </View>
+
+          </View> */}
+        <View style={{ flex: 1, backgroundColor:'FAF9F6', width:'96%' }}>
+
+          <Carousel
             loop
-            onPress={(item: any) => console.log(item)}
-            contentContainerStyle={{ paddingHorizontal: 16, resideMode: 'cover' }}
-            indicatorContainerStyle={{ position: 'absolute', bottom: scaledSize(10) }}
-            indicatorActiveColor={'#8e44ad'}
-            indicatorInActiveColor={'#ffffff'}
-            indicatorActiveWidth={10}
-            animation
-          />
-        </View>
-        {/* --------------------------------------------- Slider  View End------------------------------------------------ */}
+            width={width}
+            height={300}
+            autoPlay={false}
+            data={modalData}
+            scrollAnimationDuration={1000}
+            onSnapToItem={(index) => console.log('current index:', index)}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  flex: 1, 
+                  // justifyContent: 'center',
+                  //backgroundColor: 'purple',
+                   alignItems: 'center',
+                   top:6
+                }}
+              >
+                <View style={{ flex:1, width: '96%' }}>
+                  <ImageBackground style={{
+                    width: '96%', flex: 1, alignSelf: 'center',
+                    marginLeft: scaledSize(16),
+                  }} source={item.image} imageStyle={{ borderRadius: 10, }}>
 
+                  </ImageBackground>
+                  <View style={{backgroundColor:'white',flex:.4}}>
+                <Text>{item.first_name}</Text>
+                <Text>{item.first_name}</Text>
+              <Text>{item.first_name}</Text>
 
-
-        {/* ---------------------------------------------  Featured Categories  View Start------------------------------------------------ */}
-
-        <View style={styles.heading1View}>
-          <View style={styles.heading1RowView1}>
-
-            {/* <TouchableOpacity onPress={() => dispatch(clearOrderState())}> */}
-            <TouchableOpacity onPress={() => dispatch(getTopSoldProducts({ 'pageSize': 10, 'pageNumber': 0 }))}>
-              <Text style={[styles.heading1Text1, { color: '#6a6a6a' }]}>
-                Featured Categories API</Text>
-            </TouchableOpacity>
-          </View>
-
-        </View>
-
-        <View style={styles.scrollViewOptions2}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {categories.map((value: any, index: any) => {
-              return <View style={{ flex: 1 }} key={index}>
-                <TouchableOpacity onPress={() => {
-                  navigation.navigate('ProductList',)
-                }}>
-                  <View style={[styles.screen1Border11, { alignItems: 'center' }]}>
-                    <Image resizeMethod='resize' resizeMode='contain' source={value.image} style={styles.scrollViewImageSize1} />
-                    <Text style={styles.screen1Border12}>
-                      {value.name}</Text>
-                  </View>
-
-                </TouchableOpacity>
-
+                </View>
+                </View>
               </View>
-
-            })}
-          </ScrollView>
-        </View>
-        {/* ---------------------------------------------  Featured Categories  View End------------------------------------------------ */}
-
-
-        <View style={styles.heading1View}>
-          <View style={styles.heading1RowView}>
-            <TouchableOpacity onPress={() => dispatch(getUser())}>
-              <Text style={[styles.heading1Text, { color: '#6a6a6a' }]}>
-                Featured Products</Text>
-            </TouchableOpacity>
-          </View>
+            )}
+          />
 
         </View>
-        {/* <FlatList data={productsData}
-          //indicatorStyle='black'
-          style={{ alignSelf: 'center' }}
-          numColumns={2}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, index) => 'key' + index}
-          renderItem={({ item, index }) => renderItem(item, index)}
-          onEndReachedThreshold={0.5}
-        // onEndReached={() => this.onEndData()}
-        // ListFooterComponent={()=> this.footerLoader()}
-        /> */}
-      </ScrollView>
-
-      {search.length>0?<View style={{ height: 300, backgroundColor: 'white', position: 'absolute', 
-      left: 8, right: 0, top: 70, bottom: 0,borderWidth:1,width:'96%',alignSelf:'center',
-      borderTopWidth:0,
-      borderColor:"#d3d3d3",
-      borderRadius:8,
-      zIndex:999
-      }}>
-       {DashboardReducer.searchData.length>0?
-<FlatList
-data={DashboardReducer.searchData}
-renderItem={({item})=>renderSearchedProduct(item)}
-/>:<View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-  <Text>
-  No result found please try with different keyword
-  </Text>
-  </View>}
-      </View>:null}
-
-
+      </View>
 
 
 
     </SafeAreaView>
   )
+
 }
+
+export default DashboardScreen

@@ -8,11 +8,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { COLORS } from "../utilits/GlobalAssets"
 import { scaledSize } from '../helper/util/Utilities';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Add, AddUnfocused, Cart, CartUnfocused, Home, HomeUnfocused, Inbox, InboxUnfocused, Info, InfoUnfocused, Recent, RecentUnfocused } from '../utilits/GlobalImages';
+import { Add, AddUnfocused, Cart, CartUnfocused, Home, HomeUnfocused, Inbox, InboxUnfocused, Info, InfoUnfocused, MapIcon, MyAdds, Recent, RecentUnfocused, plus2 } from '../utilits/GlobalImages';
 // import SettingAccount from '../screen/settingaccount/settingaccount'
 import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import MyOrder from '../screen/orderDetails/MyOrders'
+import CustomMap from '../screen/map/Map'
 
 
 const AddScreen = () => {
@@ -26,10 +27,10 @@ const AddScreen = () => {
 
 const screensData = [
   { name: 'Home', focus: Home, unfocus: HomeUnfocused, component: Dashboard },
-  { name: 'Recent', focus: Recent, unfocus: RecentUnfocused, component: Dashboard },
-  { name: 'Add', focus: CartUnfocused, unfocus: Cart, component: CartScreen },
+  { name: 'My Adds', focus: MyAdds, unfocus: MyAdds, component: Dashboard },
+  { name: 'Create', focus: plus2, unfocus: plus2, component: Dashboard },
+  { name: 'Map', focus: MapIcon, unfocus: MapIcon, component: CustomMap },
   { name: 'ProfileTab', focus: Info, unfocus: InfoUnfocused, component: Profile },
-  { name: 'MyOrders', focus: Info, unfocus: InfoUnfocused, component: MyOrder }
 ]
 export default BottomTabsNavigator = () => {
   const [cartData, setCartData] = useState(0)

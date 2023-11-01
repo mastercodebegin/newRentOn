@@ -15,6 +15,7 @@ export const indiaFlag:any  =require('../assets/icons/india.png')
 export const backIcon:any  =require('../assets/images/drawable/ic_back.png')
 export const InputFieldUserIcon:any  =require('../assets/user.png')
 export const passwordInVisible:any  =require('../assets/icons/hidden.png')
+export const mapIcon:any  =require('../assets/icons/mapicon.png')
 
 export const passwordVisible:any  =require('../assets/icons/view.png')
 
@@ -60,6 +61,7 @@ export const splashImage:any  =require('../assets/logo.png')
 export const swipe1:any  =require('../assets/image1.jpeg')
 export const swipe2:any  =require('../assets/happy.jpeg')
 export const swipe3:any  =require('../assets/image3.jpeg')
+export const house:any  =require('../assets/images/house.png')
 //export const swipe4:any  =require('../assets/images/swipe4.png')
 
 //transistion images
@@ -82,6 +84,9 @@ export const girl:any  =require('../assets/images/girl.png')
 export const watch:any  =require('../assets/images/watch.png')
 export const mobile:any  =require('../assets/images/iphone.png')
 export const orangeMobile:any  =require('../assets/images/mobile.png')
+export const plus2:any  =require('../assets/images/plus.png')
+export const MapIcon:any  =require('../assets/images/planet-earth.png')
+export const MyAdds:any  =require('../assets/images/list.png')
 
 //****************************/
 export const battery:any  =require('../assets/images/b.jpg')
