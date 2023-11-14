@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { COLORS } from "../utilits/GlobalAssets"
 import { scaledSize } from '../helper/util/Utilities';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Add, AddUnfocused, Cart, CartUnfocused, Home, HomeUnfocused, Inbox, InboxUnfocused, Info, InfoUnfocused, MapIcon, MyAdds, Recent, RecentUnfocused, plus2 } from '../utilits/GlobalImages';
+import { Add, AddUnfocused, Cart, CartUnfocused, Home, HomeUnfocused, Inbox, InboxUnfocused, Info, InfoUnfocused, MapIcon, MyAdds, Recent, RecentUnfocused, mapIcon, plus2 } from '../utilits/GlobalImages';
 // import SettingAccount from '../screen/settingaccount/settingaccount'
 import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -29,7 +29,7 @@ const screensData = [
   { name: 'Home', focus: Home, unfocus: HomeUnfocused, component: Dashboard },
   { name: 'My Adds', focus: MyAdds, unfocus: MyAdds, component: Dashboard },
   { name: 'Create', focus: plus2, unfocus: plus2, component: Dashboard },
-  { name: 'Map', focus: MapIcon, unfocus: MapIcon, component: CustomMap },
+  { name: 'Map', focus: mapIcon, unfocus: mapIcon, component: CustomMap },
   { name: 'ProfileTab', focus: Info, unfocus: InfoUnfocused, component: Profile },
 ]
 export default BottomTabsNavigator = () => {

@@ -7,6 +7,7 @@ import Map from '@rnmapbox/maps';
 import UserLocation from '@rnmapbox/maps';
 import ColorfulCard from '@freakycoder/react-native-colorful-card';
 import Geolocation from '@react-native-community/geolocation';
+import { getUUIDV4 } from '../../helper/util/Utilities';
 
 
 
@@ -65,7 +66,10 @@ const CustomMap: React.FC = () => {
   }
 
   useEffect(() => {
-    getPermissionLocation()
+   
+
+    //getPermissionLocation()
+
   }, [permissionGranted, reload])
 
   // useEffect(() => {

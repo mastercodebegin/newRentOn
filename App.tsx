@@ -15,6 +15,7 @@ import ProductDetails from './src/screen/productview/productDetails'
 import SwiperFlatList from 'react-native-swiper-flatlist'
 import { bgImage, slide2, sliderImage, sliderImage2 } from './src/utilits/GlobalImages'
 import ImageSlider from './src/component/ImageSlider'
+import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown'
 const { width } = Dimensions.get('window');
 
 
@@ -29,11 +30,14 @@ const App = () => {
   }, [])
   const images = [{ image: slide2 }, { image: sliderImage }, { image: sliderImage2 }]
   return (
-    <Provider store={Store}>
-      <Navigations/>
-    </Provider>
+    <AutocompleteDropdownContextProvider>
+      <Provider store={Store}>
+        <Navigations />
+      </Provider>
+    </AutocompleteDropdownContextProvider>
+
     // <ProductDetails/>
-    
+
 
 
   )

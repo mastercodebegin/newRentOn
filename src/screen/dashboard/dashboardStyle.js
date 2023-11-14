@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
       dashboardProfileImage:{width:scaledSize(50),height:scaledSize(50),marginLeft:scaledSize(60),borderRadius:scaledSize(20),top:scaledSize(-8)},
     
 
-      searchBarView:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},
+      searchBarView:{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:400,height:100,backgroundColor:"red"},
 
       searchTextSize:{fontSize:scaledSize(14)},
 
