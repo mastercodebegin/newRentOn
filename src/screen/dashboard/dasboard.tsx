@@ -132,12 +132,13 @@ const DashboardScreen = ({ navigation, route }) => {
         <View style={{ flex: 1,backgroundColor:'white', }}>
           {/* ******************************Header Start******************************** */}
           <View style={{
-            flex: .11, marginTop: scaledSize(30),
-            flexDirection: 'row',
-             justifyContent: 'center', alignItems: 'center'
+            height:scaledSize(70), marginTop: scaledSize(30),
+            flexDirection: 'row', 
+             justifyContent: 'flex-start', alignItems: 'flex-start'
           }}>
 
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+            <View style={{ flex: 1, justifyContent: 'center', 
+            alignItems: 'flex-start', flexDirection: 'row',}}>
 
               <TouchableOpacity style={{ flex: .7, justifyContent: 'center', alignItems: 'center', }}
                 onPress={async () => { navigation.navigate('Account') }}>
@@ -145,13 +146,13 @@ const DashboardScreen = ({ navigation, route }) => {
                   resizeMode='contain'
                   style={{
                     height: scaledSize(30), width: scaledSize(30),
-                    borderRadius: scaledSize(40), right: scaledSize(10)
+                    borderRadius: scaledSize(40), right: scaledSize(10),top: scaledSize(10)
                   }}
                 />
               </TouchableOpacity>
               <View>
-                <Text style={[styles.dashboardAddressText, { marginLeft: 30 }]}>Current Location</Text>
-                <View style={[{ flex: 1, flexDirection: 'row' }]}>
+                <Text style={[styles.dashboardAddressText, { marginLeft: scaledSize(30) }]}>Current Location</Text>
+                <View style={[{ flex: 1, flexDirection: 'row',alignItems:'flex-start',justifyContent:'flex-start' }]}>
                   <Image style={{ height: scaledSize(16), width: scaledSize(16), top: scaledSize(3), right: scaledSize(4) }}
                     resizeMode='contain' source={mapIcon} />
                   <Text style={[styles.dashboardAddressText]}>WashingTon, New York</Text>
@@ -159,19 +160,19 @@ const DashboardScreen = ({ navigation, route }) => {
               </View>
             </View>
 
-            <TouchableOpacity style={{ flex: .3, justifyContent: 'center', alignItems: 'center' }}
+            <TouchableOpacity style={{ flex: .3, alignItems: 'center',justifyContent:'flex-start',height:scaledSize(100) }}
               onPress={async () => { navigation.navigate('Account') }}>
               <Image source={profile}
                 resizeMode='contain'
-                style={{ height: 50, width: 50, borderRadius: 50 }}
+                style={{ height: scaledSize(50), width: scaledSize(50), borderRadius: scaledSize(50) }}
               />
             </TouchableOpacity>
           </View>
           {/* ******************************Header End******************************** */}
 
           {/* ******************************Search Start******************************** */}
-          <View style={{ flex: .1, flexDirection: 'row',
-           marginTop: 10,}}>
+          <View style={{ height:scaledSize(70), flexDirection: 'row',
+           justifyContent:"center",alignItems:'center',}}>
             <ScrollView onScroll={() => setDropdownOpen(false)}>
 
               <AutocompleteDropdown
@@ -191,8 +192,9 @@ const DashboardScreen = ({ navigation, route }) => {
                 closeOnSubmit={true}
                 // inputHeight={42}
                 inputContainerStyle={{
-                  height: 50, backgroundColor: 'white',
-                  borderWidth: 1, borderColor: '#E0DFE4', borderRadius: 40,
+                  height: scaledSize(50), backgroundColor: 'white',
+                  borderWidth: 1, borderColor: '#E0DFE4',
+                   borderRadius: scaledSize(40), 
                 }}
                 showChevron={false}
                 textInputProps={{
@@ -201,14 +203,14 @@ const DashboardScreen = ({ navigation, route }) => {
                   autoCapitalize: 'none',
 
                   style: {
-                    borderRadius: 25,
+                    borderRadius: scaledSize(25),
                     color: 'red',
-                    paddingLeft: 18,
+                    paddingLeft: scaledSize(18),
                   },
                 }}
-                suggestionsListTextStyle={{ fontSize: 20 }}
-                containerStyle={{ paddingLeft: 10, paddingRight: 10, height: 50, }}
-                textInputProps={{ placeholder: 'search', fontSize: 20, top: 4, }}
+                suggestionsListTextStyle={{ fontSize: scaledSize(20) }}
+                containerStyle={{ paddingLeft: scaledSize(10), paddingRight: scaledSize(10), height:scaledSize(50), }}
+                textInputProps={{ placeholder: 'search', fontSize: scaledSize(20), top: scaledSize(4), }}
                 sty
                 //   RightIconComponent={<Image source={profile}
                 //   resizeMode='contain'
@@ -226,6 +228,7 @@ const DashboardScreen = ({ navigation, route }) => {
                   { id: '39', title: 'Gamma' },
                 ]}
               />
+              {/* <Searchbar/> */}
             </ScrollView>
             <View style={{ flex: .3, justifyContent: 'center', alignItems: 'center' }}>
               <Image style={{ height: scaledSize(30), width: scaledSize(30), }}
@@ -236,11 +239,13 @@ const DashboardScreen = ({ navigation, route }) => {
 
           {/* ****************************** Carousal  Start******************************** */}
       
-          <View style={{ flex: .43, width: '90%',
+          {/* <View style={{ flex: .43, width: '90%',
           alignSelf:'center',top:10,borderWidth:0, 
           elevation:4,borderRadius:10,backgroundColor:'white'
-          }}>
+          }}> */}
+{/* <View style={{height:100,backgroundColor:'red'}}>
 
+</View> */}
           <Carousel
               loop
               width={width}
@@ -251,29 +256,23 @@ const DashboardScreen = ({ navigation, route }) => {
               onSnapToItem={(index) => console.log('current index:', index)}
               renderItem={({ item }) => (
                 
-                  <View style={{  
-                    width: '90%', 
-                    
-                    height:'100%',
-                     justifyContent:'center',
-                    alignItems:'center',
-                    // borderColor:'#000'
+                <View style={{ height:scaledSize(264), width: '90%',
+                alignSelf:'center',borderWidth:0, top:scaledSize(10),
+                elevation:4,borderRadius:scaledSize(10),backgroundColor:'white',justifyContent:'center',alignContent: 'center'
+                }}>
+                    <Image style={{width: '96%',height:scaledSize(200),top:scaledSize(10),alignSelf:'center'}} source={item.image} resizeMode='contain'/>
                    
-                    
-                   }}>
-                    <Image style={{width: '96%',height:200,bottom:0}} source={item.image} resizeMode='contain'/>
-                   
-                    <View style={{ width:'100%',height:'30%', }}>
-                      <View style={{height:50,flexDirection:'row'}}>
-                      <View style={{flex:1,justifyContent:"flex-start",alignItems:'flex-start',marginLeft:8}}>
+                    <View style={{ width:'100%',height:'30%',top:scaledSize(10) }}>
+                      <View style={{height:scaledSize(50),flexDirection:'row'}}>
+                      <View style={{flex:1,justifyContent:"flex-start",alignItems:'flex-start',marginLeft:scaledSize(8)}}>
                       <Text style={{color:'black'}}>{item.first_name}</Text>
                       <View style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                      <Image style={{width: 20,height:20,}} source={mapIcon} resizeMode='contain'/>
+                      <Image style={{width: scaledSize(20),height:scaledSize(20),}} source={mapIcon} resizeMode='contain'/>
                       <Text style={{marginLeft:10,color:'black'}}>{item.first_name}</Text>
                       </View>
                       </View>
-                      <View style={{flex:1,justifyContent:'flex-end',alignItems:'flex-end',flexDirection:'row',right:4}}>
-                      <Image style={{width: 20,height:20,}} source={mapIcon} resizeMode='contain'/>
+                      <View style={{flex:1,justifyContent:'flex-end',alignItems:'flex-end',flexDirection:'row',right:scaledSize(4)}}>
+                      <Image style={{width: scaledSize(20),height:scaledSize(20),}} source={mapIcon} resizeMode='contain'/>
                       <Text style={{color:'black'}}>4.9</Text>
                       </View>
                       </View>
@@ -284,7 +283,7 @@ const DashboardScreen = ({ navigation, route }) => {
               )}
             />
 
-          </View>
+          {/* </View> */}
           {/* ****************************** Carousal  End******************************** */}
 
 
