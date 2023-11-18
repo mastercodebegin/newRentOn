@@ -88,7 +88,7 @@ const DashboardScreen = ({ navigation, route }) => {
       }} key={index}>
         {/* <TouchableOpacity onPress={() => { navigation.navigate('searchProductDetails', { data: item }) }} style={styles.productView}> */}
         {/* <TouchableOpacity onPress={() => { navigation.navigate('ProductDetails', { data: item }) }} style={styles.productView}> */}
-        <TouchableOpacity onPress={() => { alert() }} style={{ backgroundColor: 'white' }}>
+        <TouchableOpacity onPress={() => { navigation.navigate('ProductList', { data: item }) }} style={{ backgroundColor: 'white' }}>
 
           <Image source={house}
             style={{

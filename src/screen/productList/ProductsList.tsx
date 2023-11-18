@@ -67,44 +67,40 @@ dispatch(getProducts({pageSize:10,pageNumber:0}))
 
   const renderItem=(item: any, index: number)=> {    
     return (
-      //<View style={{backgroundColor:'purple',height:200,width:160,margin:4
-    // }}>
-    // { type: 'home', address: 'vijay nagar', id: 1, image: house, rating: 4, price: 4000000, room: 2, floor: 2 }
-    <TouchableOpacity style={{
-      height: scaledSize(264), width:scaledSize(340),
-      alignSelf: 'center', borderWidth: 0, top: scaledSize(10),
-      elevation: 4, borderRadius: scaledSize(10),marginTop:scaledSize(10),
-      backgroundColor: 'red', justifyContent: 'center', alignContent: 'center'
-    }} onPress={() => alert(item.id)}>
-      <Image style={{ width: scaledSize(310), height: scaledSize(200), top: scaledSize(20), alignSelf: 'center' }} source={item.image} resizeMode='contain' />
+      <TouchableOpacity style={{
+        height: scaledSize(264), width: '90%',marginBottom:scaledSize(4),
+        alignSelf: 'center', borderWidth: 0, elevation: 4,
+         borderRadius: scaledSize(10),marginTop:scaledSize(10),
+        backgroundColor: 'white', justifyContent: 'center', alignContent: 'center'
+      }} onPress={() => alert(item.id)}>
+        <Image style={{ width: scaledSize(310), height: scaledSize(200), top: scaledSize(20), alignSelf: 'center' }} source={item.image} resizeMode='contain' />
 
-      <View style={{ width: '100%', height: '38%', top: scaledSize(10), left: scaledSize(6) }}>
-        <View style={{ height: scaledSize(50), flexDirection: 'row' }}>
-          <View style={{
-            flex: 1, justifyContent: "flex-start", alignItems: 'flex-start',
+        <View style={{ width: '100%', height: '38%', top: scaledSize(10), left: scaledSize(6) }}>
+          <View style={{ height: scaledSize(50), flexDirection: 'row' }}>
+            <View style={{
+              flex: 1, justifyContent: "flex-start", alignItems: 'flex-start',
 
-          }}>
-            {/* <Text style={{ color: 'black', fontFamily: Fonts.bold, left: scaledSize(28), }}>{capitalizeFirstLetter(item.type)}</Text> */}
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Image style={{ width: scaledSize(20), height: scaledSize(20), }} source={mapIcon} resizeMode='contain' />
-              <Text style={{ marginLeft: scaledSize(10), color: 'black', fontFamily: Fonts.PTSerifBold, letterSpacing: 1 }}>{capitalizeFirstLetter(item.address)}</Text>
+            }}>
+              {/* <Text style={{ color: 'black', fontFamily: Fonts.bold, left: scaledSize(28), }}>{capitalizeFirstLetter(item.type)}</Text> */}
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={{ width: scaledSize(20), height: scaledSize(20), }} source={mapIcon} resizeMode='contain' />
+                <Text style={{ marginLeft: scaledSize(10), color: 'black', fontFamily: Fonts.PTSerifBold, letterSpacing: 1 }}>{capitalizeFirstLetter(item.address)}</Text>
+              </View>
             </View>
-          </View>
-          <View style={{
-            flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end',
-            flexDirection: 'row', right: scaledSize(10)
-          }}>
-            <Image style={{ width: scaledSize(16), height: scaledSize(16), right: scaledSize(4), bottom: scaledSize(2) }} source={starIcon} resizeMode='contain' />
-            <Text style={{ fontFamily: Fonts.PTSerifBold, color: 'black' }}>4.8</Text>
-          </View>
+            <View style={{
+              flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end',
+              flexDirection: 'row', right: scaledSize(10)
+            }}>
+              <Image style={{ width: scaledSize(16), height: scaledSize(16), right: scaledSize(4), bottom: scaledSize(2) }} source={starIcon} resizeMode='contain' />
+              <Text style={{ fontFamily: Fonts.PTSerifBold, color: 'black' }}>4.8</Text>
+            </View>
 
+          </View>
+          <View style={{ height: 20, width: '100%' }}>
+            <Text style={{ fontFamily: Fonts.bold }}>{`Price/₹${item.price}`}</Text>
+          </View>
         </View>
-        <View style={{ height: 20, width: '100%' }}>
-          <Text style={{ fontFamily: Fonts.bold }}>{`Price/₹${item.price}`}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-    // </View>
+      </TouchableOpacity>
     )
   }
 
@@ -121,7 +117,7 @@ dispatch(getProducts({pageSize:10,pageNumber:0}))
     // if (this.state.scrollLoad) return null
     return (
       <View style={{ paddingVertical: scaledSize(50) }}>
-        <ActivityIndicator color='red' style={{ bottom: scaledSize(40) }} animating size={'large'} />
+        {/* <ActivityIndicator color='red' style={{ bottom: scaledSize(40) }} animating size={'large'} /> */}
       </View>
     )
   }
@@ -150,7 +146,7 @@ dispatch(getProducts({pageSize:10,pageNumber:0}))
         <TouchableOpacity style={{ position: 'absolute', right: 0, top: scaledSize(26), marginRight: scaledSize(25) }}>
           <Image source={searchIcon} resizeMode='contain' style={{ width: scaledSize(20), height: scaledSize(25) }} />
         </TouchableOpacity>
-        <View style={{ margin:4 }}>
+        {/* <View style={{ flex:1,bottom:20 }}> */}
           <FlatList 
           data={modalData}
            
@@ -158,12 +154,12 @@ dispatch(getProducts({pageSize:10,pageNumber:0}))
             keyExtractor={(item, index) => 'key' + index}
             renderItem={({ item, index }) => renderItem(item, index)}
             onEndReachedThreshold={0.5}
-            // onEndReached={() => !this.state.search && this.onEndData()}
-            //ListFooterComponent={() =>footerLoader()}
+           
+            // ListFooterComponent={() =>footerLoader()}
           />
-        </View>
+        {/* </View> */}
         <CustomSpinner isLoading={reducer?.isLoading}/>
-        <View style={{height:100,backgroundColor:'red'}}></View>
+        {/* <View style={{height:2,backgroundColor:'white'}}></View> */}
       </View>
     )
   

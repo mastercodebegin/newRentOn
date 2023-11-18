@@ -58,21 +58,7 @@ export default ProductDetails = (props) => {
 
   const getVariants = (variantIndex,) => {
 
-    const str = JSON.stringify(props.route.params.data)
-    const obj = JSON.parse(str)
-    setVariantImages(obj.vendorProductsVaraint[0].vendorProductsVariantColor[0].modalColors.modalImages.map((item) => item).map((image) => UrlConstants.S3_BASE_URL + image.imageName))
-    setVariant(obj)
-    setVariantID(obj.vendorProductsVaraint[0].id)
-    setVariantColorID(obj.vendorProductsVaraint[0].vendorProductsVariantColor[0].modalColors.id)
-    setVendorProductsVariantColorID(obj.vendorProductsVaraint[0].vendorProductsVariantColor[0]?.id)
-    setModalNumber(obj.productModelNumber?.name)
-    setVariantSpecification(obj.vendorProductsVaraint[0])
-    setPrice(obj.vendorProductsVaraint[0].price)
-    setColorName(obj.vendorProductsVaraint[0].vendorProductsVariantColor[0].modalColors?.colorName?.color)
-    setVendorID(obj?.vendor?.id)
-    console.log('price---', obj.vendorProductsVaraint[0].price);
-    console.log('price---', obj.productModelNumber?.name);
-
+  
 
 
   }
