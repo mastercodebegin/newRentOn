@@ -2,6 +2,7 @@ import React from 'react'
 import {StyleSheet,Dimensions} from 'react-native'
 import {heightFromPercentage,scaledSize,widthFromPercentage} from '../../helper/util/Utilities'
 import { COLORS } from '../../utilits/GlobalColors';
+import { Fonts } from '../../utilits/GlobalAssets';
 const {height} = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
@@ -33,7 +34,8 @@ export const styles = StyleSheet.create({
          borderRadius:scaledSize(29),
          borderColor:COLORS.themeBlue, 
          margin: 10,
-         marginLeft:scaledSize(5)
+         marginLeft:scaledSize(5),
+         fontFamily:Fonts.PTSerifBold
       },
       productView: {
         backgroundColor: COLORS.white,

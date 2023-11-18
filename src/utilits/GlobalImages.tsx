@@ -96,6 +96,7 @@ export const ram:any  =require('../assets/images/ram.jpg')
 export const signal:any  =require('../assets/images/signal.png')
 export const close:any  =require('../assets/images/close.png')
 export const searchIcon:any  =require('../assets/images/searchIcon.png')
+export const starIcon:any  =require('../assets/images/star1.png')
 
 export const location:any  =require('../assets/images/location.png')
 export const locationColor:any  =require('../assets/images/locationColor.png')
