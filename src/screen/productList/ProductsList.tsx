@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createRef, useEffect, useState, useRef, useReducer } from 'react'
-import { View, Text, FlatList, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity, TextInput, TouchableNativeFeedback, StatusBar, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity, TextInput, TouchableNativeFeedback, StatusBar, ActivityIndicator, Modal } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { Modalize } from 'react-native-modalize';
 import { Searchbar } from 'react-native-paper';
@@ -9,7 +9,7 @@ import HeaderComponent from '../../component/HeaderComponent';
 import CustomeButton from '../../helper/util/CustomeButton';
 import { capitalizeFirstLetter, scaledSize } from '../../helper/util/Utilities';
 import { COLORS, Fonts } from '../../utilits/GlobalAssets';
-import { arrowLeftIcon, black, cement, dresses, filter, girl, green, house, mapIcon, mobile, searchIcon, starIcon, suite, watch2 } from '../../utilits/GlobalImages';
+import { arrowLeftIcon, black, cement, close, dresses, filter, girl, green, house, mapIcon, mobile, searchIcon, starIcon, suite, watch2 } from '../../utilits/GlobalImages';
 import { UrlConstants } from '../../context/service/UrlConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, getReqresUser } from './ProductsSlice';
@@ -52,6 +52,7 @@ const ProductList = (props: any) => {
   const [search, setSearch] = useState('')
   const [products, setProducts] = useState([])
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
 
@@ -158,49 +159,54 @@ const ProductList = (props: any) => {
         <TouchableOpacity style={{ position: 'absolute', right: 0, top: scaledSize(26), marginRight: scaledSize(25) }}>
           <Image source={searchIcon} resizeMode='contain' style={{ width: scaledSize(20), height: scaledSize(25) }} />
         </TouchableOpacity> */}
-      <View style={{ height: scaledSize(70), backgroundColor: 'white', width: '100%',
-      justifyContent:'center',alignItems:'center',flexDirection:'row' }}>
-      <View style={{ height: scaledSize(50), backgroundColor: 'white', width: '80%',marginLeft:scaledSize(20) }}>
-        <AutocompleteDropdown
-          clearOnFocus={false}
-          closeOnBlur={true}
-          closeOnSubmit={false}
-          // initialValue={{ id: '2' }} // or just '2'
-          onSelectItem={(item) => console.log('item===', item)}
-          dataSet={[
-            
-          ]}
-          inputContainerStyle={{
-            height: scaledSize(50), backgroundColor: 'white',
-            borderWidth: 1, borderColor: '#E0DFE4',
-            borderRadius: scaledSize(40),
-          }}
-          showChevron={false}
-          textInputProps={{
-            placeholder: 'Search',
-            autoCorrect: false,
-            autoCapitalize: 'none',
-            
+      <View style={{
+        height: scaledSize(70), backgroundColor: 'white', width: '100%',
+        justifyContent: 'center', alignItems: 'center', flexDirection: 'row'
+      }}>
+        <View style={{ height: scaledSize(50), backgroundColor: 'white', width: '80%', marginLeft: scaledSize(20) }}>
+          <AutocompleteDropdown
+            clearOnFocus={false}
+            closeOnBlur={true}
+            closeOnSubmit={false}
+            // initialValue={{ id: '2' }} // or just '2'
+            onSelectItem={(item) => console.log('item===', item)}
+            dataSet={[
 
-            style: {
-              borderRadius: scaledSize(25),
-              color: 'red',
-              paddingLeft: scaledSize(18),
-              fontSize:scaledSize(16),
-              alignSelf:'center',
-              left:scaledSize(12),
-              fontFamily:Fonts.regular
-            },
-          }}
+            ]}
+            inputContainerStyle={{
+              height: scaledSize(50), backgroundColor: 'white',
+              borderWidth: 1, borderColor: '#E0DFE4',
+              borderRadius: scaledSize(40),
+            }}
+            showChevron={false}
+            textInputProps={{
+              placeholder: 'Search',
+              autoCorrect: false,
+              autoCapitalize: 'none',
 
-        />
-      </View>
-      <View style={{ height: scaledSize(50),  width: '20%',justifyContent:'center',alignItems:'flex-start',}}>
-      <Image source={filter}
-              resizeMode='contain'
-              style={{ height: scaledSize(34), width: scaledSize(34), borderRadius: scaledSize(34),left:scaledSize(8),top:scaledSize(4) }}
-            />
-      </View>
+
+              style: {
+                borderRadius: scaledSize(25),
+                color: 'red',
+                paddingLeft: scaledSize(18),
+                fontSize: scaledSize(16),
+                alignSelf: 'center',
+                left: scaledSize(12),
+                fontFamily: Fonts.regular
+              },
+            }}
+
+          />
+        </View>
+        <TouchableOpacity style={{ height: scaledSize(50), width: '20%',
+         justifyContent: 'center', alignItems: 'flex-start', }} onPress={()=>setIsModalOpen(true)}>
+          <Image source={filter}
+            resizeMode='contain'
+            style={{ height: scaledSize(34), 
+              width: scaledSize(34), borderRadius: scaledSize(34), 
+              left: scaledSize(8), top: scaledSize(4) }}
+          />
+        </TouchableOpacity>
       </View>
       {/* <View style={{ flex:1,bottom:20 }}> */}
       <FlatList
@@ -216,6 +222,22 @@ const ProductList = (props: any) => {
       {/* </View> */}
       <CustomSpinner isLoading={reducer?.isLoading} />
       {/* <View style={{height:2,backgroundColor:'white'}}></View> */}
+      <Modal visible={isModalOpen} transparent>
+        <View style={{ height:scaledSize(500),width:scaledSize(400), 
+        backgroundColor: 'white',marginTop:scaledSize(100),
+        borderRadius:20,alignSelf:'center',elevation:4 }}>
+        <TouchableOpacity style={{ flex:.1,right:scaledSize(20),
+         justifyContent: 'center', alignItems: 'flex-end', }} onPress={()=>setIsModalOpen(false)}>
+          <Image source={close}
+            resizeMode='contain'
+            style={{ height: scaledSize(34), 
+              width: scaledSize(34), borderRadius: scaledSize(34), 
+              left: scaledSize(8), top: scaledSize(4) }}
+          />
+        </TouchableOpacity>
+
+        </View>
+      </Modal>
     </View>
   )
 
