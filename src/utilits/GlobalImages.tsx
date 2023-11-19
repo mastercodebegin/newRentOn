@@ -112,6 +112,7 @@ export const green:any  =require('../assets/images/fashion.png')
 export const black:any  =require('../assets/images/black.png')
 export const suite:any  =require('../assets/images/suite.png')
 export const cement:any  =require('../assets/images/cement.png')
+export const filter:any  =require('../assets/images/filter.png')
 
 // {Bottom-tab focus-light blue images} 
 

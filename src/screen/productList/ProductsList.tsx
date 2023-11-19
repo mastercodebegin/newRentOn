@@ -9,11 +9,13 @@ import HeaderComponent from '../../component/HeaderComponent';
 import CustomeButton from '../../helper/util/CustomeButton';
 import { capitalizeFirstLetter, scaledSize } from '../../helper/util/Utilities';
 import { COLORS, Fonts } from '../../utilits/GlobalAssets';
-import { arrowLeftIcon, black, cement, dresses, girl, green, house, mapIcon, mobile, searchIcon, starIcon, suite, watch2 } from '../../utilits/GlobalImages';
+import { arrowLeftIcon, black, cement, dresses, filter, girl, green, house, mapIcon, mobile, searchIcon, starIcon, suite, watch2 } from '../../utilits/GlobalImages';
 import { UrlConstants } from '../../context/service/UrlConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, getReqresUser } from './ProductsSlice';
 import CustomSpinner from '../../component/CustomSpinner';
+import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+
 const width = Dimensions.get('window').width;
 
 interface S {
@@ -45,32 +47,39 @@ interface SS {
 
 
 
-const   ProductList =(props:any)=> {
+const ProductList = (props: any) => {
 
-const [search, setSearch] = useState('')
-const [products, setProducts] = useState([])
-const [modalData, setModalData] = useState([
-  { type: 'home', address: 'vijay nagar', id: 1, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
-  { type: 'office', address: 'plasiya', id: 2, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
-  { type: 'office', address: 'plasiya', id: 2, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
+  const [search, setSearch] = useState('')
+  const [products, setProducts] = useState([])
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-])
-const dispatch = useDispatch()
-const reducer = useSelector((state:any)=>state.ProductsSlice)
-useEffect(()=>{
-  console.log('useeffects--------------------------------',reducer);
-  
-  //@ts-ignore
-dispatch(getProducts({pageSize:10,pageNumber:0}))
-// dispatch(getReqresUser())
-},[])
 
-  const renderItem=(item: any, index: number)=> {    
+  const [modalData, setModalData] = useState([
+    { type: 'home', address: 'vijay nagar', id: 1, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
+    { type: 'office', address: 'plasiya', id: 2, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
+    { type: 'office', address: 'plasiya', id: 2, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
+
+  ])
+  const dispatch = useDispatch()
+  const reducer = useSelector((state: any) => state.ProductsSlice)
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
+  useEffect(() => {
+    console.log('useeffects--------------------------------', reducer);
+
+    //@ts-ignore
+    dispatch(getProducts({ pageSize: 10, pageNumber: 0 }))
+    // dispatch(getReqresUser())
+  }, [])
+
+  const renderItem = (item: any, index: number) => {
     return (
       <TouchableOpacity style={{
-        height: scaledSize(264), width: '90%',marginBottom:scaledSize(4),
+        height: scaledSize(264), width: '90%', marginBottom: scaledSize(4),
         alignSelf: 'center', borderWidth: 0, elevation: 4,
-         borderRadius: scaledSize(10),marginTop:scaledSize(10),
+        borderRadius: scaledSize(10), marginTop: scaledSize(10),
         backgroundColor: 'white', justifyContent: 'center', alignContent: 'center'
       }} onPress={() => alert(item.id)}>
         <Image style={{ width: scaledSize(310), height: scaledSize(200), top: scaledSize(20), alignSelf: 'center' }} source={item.image} resizeMode='contain' />
@@ -113,7 +122,7 @@ dispatch(getProducts({pageSize:10,pageNumber:0}))
 
   // }
 
-  const footerLoader=()=> {
+  const footerLoader = () => {
     // if (this.state.scrollLoad) return null
     return (
       <View style={{ paddingVertical: scaledSize(50) }}>
@@ -134,35 +143,82 @@ dispatch(getProducts({pageSize:10,pageNumber:0}))
   //     this.setState({ searchProductsData: products })
   //   }
   // }
+  const onSelect = (item: any) => {
+    console.log('================================', item);
 
-  
-    return (
-      <View style={{ flex: 1, backgroundColor: COLORS.white }}>
-        <TextInput placeholder='Search products . . .' style={{ width: '80%', backgroundColor: COLORS.white, left: scaledSize(50), top: scaledSize(10) }} 
+  }
+
+  return (
+    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+      {/* <TextInput placeholder='Search products . . .' style={{ width: '80%', backgroundColor: COLORS.white, left: scaledSize(50), top: scaledSize(10) }} 
         value={search} onChangeText={(value: any) => { setSearch( value )}} />
         <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: 'absolute', left: 0, top: scaledSize(26), marginLeft: scaledSize(15) }}>
           <Image source={arrowLeftIcon} resizeMode='contain' style={{ width: scaledSize(20), height: scaledSize(25),tintColor:'gray',bottom:scaledSize(4) }} />
         </TouchableOpacity>
         <TouchableOpacity style={{ position: 'absolute', right: 0, top: scaledSize(26), marginRight: scaledSize(25) }}>
           <Image source={searchIcon} resizeMode='contain' style={{ width: scaledSize(20), height: scaledSize(25) }} />
-        </TouchableOpacity>
-        {/* <View style={{ flex:1,bottom:20 }}> */}
-          <FlatList 
-          data={modalData}
-           
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => 'key' + index}
-            renderItem={({ item, index }) => renderItem(item, index)}
-            onEndReachedThreshold={0.5}
-           
-            // ListFooterComponent={() =>footerLoader()}
-          />
-        {/* </View> */}
-        <CustomSpinner isLoading={reducer?.isLoading}/>
-        {/* <View style={{height:2,backgroundColor:'white'}}></View> */}
+        </TouchableOpacity> */}
+      <View style={{ height: scaledSize(70), backgroundColor: 'white', width: '100%',
+      justifyContent:'center',alignItems:'center',flexDirection:'row' }}>
+      <View style={{ height: scaledSize(50), backgroundColor: 'white', width: '80%',marginLeft:scaledSize(20) }}>
+        <AutocompleteDropdown
+          clearOnFocus={false}
+          closeOnBlur={true}
+          closeOnSubmit={false}
+          // initialValue={{ id: '2' }} // or just '2'
+          onSelectItem={(item) => console.log('item===', item)}
+          dataSet={[
+            
+          ]}
+          inputContainerStyle={{
+            height: scaledSize(50), backgroundColor: 'white',
+            borderWidth: 1, borderColor: '#E0DFE4',
+            borderRadius: scaledSize(40),
+          }}
+          showChevron={false}
+          textInputProps={{
+            placeholder: 'Search',
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            
+
+            style: {
+              borderRadius: scaledSize(25),
+              color: 'red',
+              paddingLeft: scaledSize(18),
+              fontSize:scaledSize(16),
+              alignSelf:'center',
+              left:scaledSize(12),
+              fontFamily:Fonts.regular
+            },
+          }}
+
+        />
       </View>
-    )
-  
+      <View style={{ height: scaledSize(50),  width: '20%',justifyContent:'center',alignItems:'flex-start',}}>
+      <Image source={filter}
+              resizeMode='contain'
+              style={{ height: scaledSize(34), width: scaledSize(34), borderRadius: scaledSize(34),left:scaledSize(8),top:scaledSize(4) }}
+            />
+      </View>
+      </View>
+      {/* <View style={{ flex:1,bottom:20 }}> */}
+      <FlatList
+        data={modalData}
+
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) => 'key' + index}
+        renderItem={({ item, index }) => renderItem(item, index)}
+        onEndReachedThreshold={0.5}
+
+      // ListFooterComponent={() =>footerLoader()}
+      />
+      {/* </View> */}
+      <CustomSpinner isLoading={reducer?.isLoading} />
+      {/* <View style={{height:2,backgroundColor:'white'}}></View> */}
+    </View>
+  )
+
 }
 
 const styles = StyleSheet.create({
@@ -184,31 +240,11 @@ const styles = StyleSheet.create({
     //top: scaledSize(10),
     // margin: scaledSize(10),
     // marginLeft: scaledSize(20),
-     height: scaledSize(200),
+    height: scaledSize(200),
     // width: scaledSize(160)
   },
   productName: {
     fontSize: scaledSize(11), textAlign: 'center', maxWidth: scaledSize(120), justifyContent: 'center', alignItems: 'center', color: COLORS.black, fontFamily: 'Cormorant-Bold', marginTop: scaledSize(20), top: scaledSize(-10), marginRight: scaledSize(20), left: scaledSize(8), padding: scaledSize(1)
-  },
-  productPrice: {
-    fontSize: scaledSize(11),
-    textAlign: 'center',
-    maxWidth: scaledSize(120),
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'red',
-    fontFamily: 'Cormorant-Bold',
-    top: scaledSize(-10),
-    marginRight: scaledSize(20),
-    left: scaledSize(8),
-    padding: scaledSize(1)
-  },
-  productPrice2: {
-    fontSize: scaledSize(11),
-    top: scaledSize(-20),
-    marginLeft: scaledSize(5),
-    textAlign: 'center',
-    color: COLORS.grey
   },
   productImage:
   {

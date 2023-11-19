@@ -95,7 +95,8 @@ const StackNavigator = (props) => {
 const AuthNavigator = () => {
   return (
     <Stack.Navigator initialRouteName={'bottomNavigation'} screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="bottomNavigation" component={BottomTabNavigator} />
+      {/* <Stack.Screen name="bottomNavigation" component={BottomTabNavigator} /> */}
+      <Stack.Screen name="ProductList" component={ProductdList} />
       <Stack.Screen name="PreviewOrderDetails" component={PreviewOrderDetails} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
       <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
@@ -103,7 +104,6 @@ const AuthNavigator = () => {
       <Stack.Screen name="Address" component={AddressList} />
       <Stack.Screen name="Security" component={Security} />
       <Stack.Screen name="Account" component={UserInformation} />
-      <Stack.Screen name="ProductList" component={ProductdList} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen name="searchProductDetails" component={searchProductDetails} />
       <Stack.Screen name="Login" component={Login} />
