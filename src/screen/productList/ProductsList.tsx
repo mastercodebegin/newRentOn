@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createRef, useEffect, useState, useRef, useReducer } from 'react'
 import { View, Text, FlatList, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity, TextInput, TouchableNativeFeedback, StatusBar, ActivityIndicator, Modal } from 'react-native'
-import { Icon } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/AntDesign'
+import Gps from 'react-native-vector-icons/MaterialIcons'
 import { Modalize } from 'react-native-modalize';
 import { Searchbar } from 'react-native-paper';
 import Swiper from 'react-native-swiper';
@@ -17,6 +18,7 @@ import CustomSpinner from '../../component/CustomSpinner';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import Slider from 'rn-range-slider';
 import PriceRangeSlider from '../../component/PriceRangeSlider';
+
 
 const width = Dimensions.get('window').width;
 
@@ -56,6 +58,7 @@ const ProductList = (props: any) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const [selectedPriceId, setSelectedPriceId] = useState(0)
 
   const [modalData, setModalData] = useState([
@@ -70,6 +73,12 @@ const ProductList = (props: any) => {
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
   };
+
+  const modalizeRef = useRef<Modalize>(null);
+
+  const LookingTodata = [{id:'1',title:'Buy',},{id:'2',title:'Rent/Lease'},{id:'3',title:'PG/Co-living'}]
+  const PurposeofBuyingdata = [{id:'4',title:'Residential use',},{id:'5',title:'Commercial use'}]
+
   useEffect(() => {
     console.log('useeffects--------------------------------', reducer);
 
@@ -117,6 +126,30 @@ const ProductList = (props: any) => {
     )
   }
 
+  const renderItem1=(item:any , index: number)=>{
+    const backgroundColor = item.id === selectedId ? '#f1f8ff' : '#ffffff';
+    return(
+        <View style={{flexDirection:'row'}}>
+         <TouchableOpacity onPress={() => setSelectedId(item.id)} style={{marginTop:scaledSize(5),marginLeft:scaledSize(5)}}>
+          <View style={{borderRadius:scaledSize(18),
+            borderWidth:1,
+            borderColor:'lightgrey',
+            // width:scaledSize(50),
+            padding:scaledSize(6),
+            paddingLeft:15,
+            paddingRight:15,
+            backgroundColor:backgroundColor,
+            // height:scaledSize(30),
+            justifyContent:'center',
+            alignItems:'center'}}>
+          <Text style={{fontFamily:Fonts.regular,color:'black',fontWeight:'600'}}>{item.title}</Text>
+          </View>
+          </TouchableOpacity>
+          </View>
+    )
+  }
+
+  
 
   const footerLoader = () => {
     // if (this.state.scrollLoad) return null
@@ -143,6 +176,7 @@ const ProductList = (props: any) => {
     console.log('================================', item);
 
   }
+
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -196,7 +230,7 @@ const ProductList = (props: any) => {
         <TouchableOpacity style={{
           height: scaledSize(50), width: '20%',
           justifyContent: 'center', alignItems: 'flex-start',
-        }} onPress={() => setIsModalOpen(true)}>
+        }} onPress={() => modalizeRef.current?.open()}>
           <Image source={filter}
             resizeMode='contain'
             style={{
@@ -219,9 +253,9 @@ const ProductList = (props: any) => {
       // ListFooterComponent={() =>footerLoader()}
       />
       {/* </View> */}
-      <CustomSpinner isLoading={reducer?.isLoading} />
+      {/* <CustomSpinner isLoading={reducer?.isLoading} /> */}
       {/* <View style={{height:2,backgroundColor:'white'}}></View> */}
-      <Modal visible={isModalOpen} transparent>
+      {/* <Modal visible={isModalOpen} transparent>
         <View style={{
           height: scaledSize(500), width: scaledSize(400),
           backgroundColor: 'white', marginTop: scaledSize(100),
@@ -254,7 +288,138 @@ const ProductList = (props: any) => {
           </View>
         </View>
 
-      </Modal>
+      </Modal> */}
+      <Modalize ref={modalizeRef} snapPoint={550}>
+      <View style={{
+          height:scaledSize(600),
+          borderRadius: 12,
+          padding:scaledSize(10)
+        }}>
+         <View style={{flex:.4,paddingTop:scaledSize(10)}}>
+          <Text style={{fontWeight:'bold',color:'black',fontSize:scaledSize(15)}}>You were exploring</Text>
+          <TouchableOpacity style={{marginTop:scaledSize(12),marginLeft:scaledSize(5)}}>
+            <View style={{width:scaledSize(110),height:scaledSize(30),borderRadius:scaledSize(6),
+            borderWidth:1,borderColor:'lightgrey',flexDirection:'row',justifyContent:'space-around',alignItems:'center'}}>
+              <Icon name="home"/>
+              <Text style={{fontWeight:'400',color:'black',}}>Buy in Indore</Text>
+            </View>
+          </TouchableOpacity>
+         </View>
+         <View style={{flex:.4}}>
+         <Text style={{fontWeight:'bold',color:'black',fontSize:scaledSize(15)}}>Looking to</Text>
+         {/* <View style={{flexDirection:'row'}}>
+         <TouchableOpacity style={{marginTop:scaledSize(5),marginLeft:scaledSize(5)}}>
+          <View style={{borderRadius:scaledSize(15),
+            borderWidth:1,
+            borderColor:'lightgrey',
+            // width:scaledSize(50),
+            padding:scaledSize(8),
+            // height:scaledSize(30),
+            justifyContent:'center',
+            alignItems:'center'}}>
+          <Text style={{fontWeight:'bold',}}>Buy</Text>
+          </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginTop:scaledSize(5),marginLeft:scaledSize(10)}}>
+          <View style={{borderRadius:scaledSize(15),
+            borderWidth:1,
+            borderColor:'lightgrey',
+            padding:scaledSize(8),
+            // width:scaledSize(90),
+            // height:scaledSize(30),
+            justifyContent:'center',
+            alignItems:'center'}}>
+          <Text style={{fontWeight:'bold'}}>Rent/Lease</Text>
+          </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginTop:scaledSize(5),marginLeft:scaledSize(10)}}>
+          <View style={{borderRadius:scaledSize(15),
+            borderWidth:1,
+            borderColor:'lightgrey',
+            padding:scaledSize(8),
+            // width:scaledSize(90),
+            // height:scaledSize(30),
+            justifyContent:'center',
+            alignItems:'center'}}>
+          <Text style={{fontWeight:'bold'}}>PG/Co-living</Text>
+          </View>
+          </TouchableOpacity>
+         </View> */}
+         
+         <FlatList 
+         data={LookingTodata}
+         renderItem={({ item, index }) => renderItem1(item, index)}
+         keyExtractor={(item, index) => 'key' + index}
+         horizontal={true}
+         />
+         
+         </View>
+         <View style={{flex:.4}}>
+           <Text style={{fontWeight:'bold',color:'black',fontSize:scaledSize(15)}}>Purpose of buying</Text>
+         {/* <View style={{flexDirection:'row'}}>
+         <TouchableOpacity style={{marginTop:scaledSize(5),marginLeft:scaledSize(10)}}>
+          <View style={{borderRadius:scaledSize(15),
+            borderWidth:1,
+            borderColor:'lightgrey',
+            width:scaledSize(120),
+            height:scaledSize(35),
+            justifyContent:'center',
+            alignItems:'center'}}>
+          <Text style={{fontWeight:'bold'}}>Residential use</Text>
+          </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginTop:scaledSize(5),marginLeft:scaledSize(10)}}>
+          <View style={{borderRadius:scaledSize(15),
+            borderWidth:1,
+            borderColor:'lightgrey',
+            width:scaledSize(120),
+            height:scaledSize(35),
+            justifyContent:'center',
+            alignItems:'center'}}>
+          <Text style={{fontWeight:'bold'}}>Commercial use</Text>
+          </View>
+          </TouchableOpacity>
+         </View> */}
+          <FlatList 
+         data={PurposeofBuyingdata}
+         renderItem={({ item, index }) => renderItem1(item, index)}
+         keyExtractor={(item, index) => 'key' + index}
+         horizontal={true}
+         />
+         
+         </View>
+         <View style={{flex:1}}>
+          <Text style={{fontWeight:'bold',fontSize:scaledSize(15),color:'black'}}>City Name</Text>
+          <View>
+            <View style={{flexDirection: 'row',
+  borderBottomWidth: 1,
+  borderColor: '#000',
+  }}>
+           <TextInput placeholder='Where?'style={{flex:1,fontSize:25}}/>
+           <Icon name="search1" color='#3074a6'
+    size={25} style={{paddingTop:scaledSize(15)}}/>
+          </View>
+          <View>
+            <TouchableOpacity>
+              <View style={{flexDirection:'row',paddingTop:scaledSize(5)}}>
+              <Gps name="gps-fixed" color='#006dde'
+    size={20} />
+    <Text style={{marginLeft:scaledSize(3),color:'#4779ca'}}>Detect my current city</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          </View>
+          <View style={{alignSelf:'center',marginTop:scaledSize(15)}}>
+            <TouchableOpacity>
+              <View style={{width:scaledSize(330),borderRadius:scaledSize(5),justifyContent:'center',alignItems:'center',backgroundColor:'#0075df',height:scaledSize(50)}}>
+                <Text style={{fontWeight:'bold',color:'white',}}>Explore</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+         </View>
+          
+        </View>
+         </Modalize>
     </View>
   )
 
