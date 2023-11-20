@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, getReqresUser } from './ProductsSlice';
 import CustomSpinner from '../../component/CustomSpinner';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import Slider from 'rn-range-slider';
+import PriceRangeSlider from '../../component/PriceRangeSlider';
 
 const width = Dimensions.get('window').width;
 
@@ -54,7 +56,7 @@ const ProductList = (props: any) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const [selectedPriceId, setSelectedPriceId] = useState(0)
 
   const [modalData, setModalData] = useState([
     { type: 'home', address: 'vijay nagar', id: 1, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
@@ -62,6 +64,7 @@ const ProductList = (props: any) => {
     { type: 'office', address: 'plasiya', id: 2, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
 
   ])
+  const [priceRange, setPriceRange] = useState([{ id: 1, min: 10, max: 20 }, { id: 2, min: 10, max: 40 }, { id: 3, min: 20, max: 50 }, { id: 4, min: 20, max: 30 },])
   const dispatch = useDispatch()
   const reducer = useSelector((state: any) => state.ProductsSlice)
   const toggleDropdown = () => {
@@ -114,14 +117,6 @@ const ProductList = (props: any) => {
     )
   }
 
-  // async onEndData() {
-  //   this.setState({ scrollLoad: true })
-  //   setTimeout(() => {
-  //     this.setState({ productsData: this.state.productsData.concat(extraProducts) })
-  //     this.setState({ scrollLoad: false })
-  //   }, 2000);
-
-  // }
 
   const footerLoader = () => {
     // if (this.state.scrollLoad) return null
@@ -198,13 +193,17 @@ const ProductList = (props: any) => {
 
           />
         </View>
-        <TouchableOpacity style={{ height: scaledSize(50), width: '20%',
-         justifyContent: 'center', alignItems: 'flex-start', }} onPress={()=>setIsModalOpen(true)}>
+        <TouchableOpacity style={{
+          height: scaledSize(50), width: '20%',
+          justifyContent: 'center', alignItems: 'flex-start',
+        }} onPress={() => setIsModalOpen(true)}>
           <Image source={filter}
             resizeMode='contain'
-            style={{ height: scaledSize(34), 
-              width: scaledSize(34), borderRadius: scaledSize(34), 
-              left: scaledSize(8), top: scaledSize(4) }}
+            style={{
+              height: scaledSize(34),
+              width: scaledSize(34), borderRadius: scaledSize(34),
+              left: scaledSize(8), top: scaledSize(4)
+            }}
           />
         </TouchableOpacity>
       </View>
@@ -223,20 +222,38 @@ const ProductList = (props: any) => {
       <CustomSpinner isLoading={reducer?.isLoading} />
       {/* <View style={{height:2,backgroundColor:'white'}}></View> */}
       <Modal visible={isModalOpen} transparent>
-        <View style={{ height:scaledSize(500),width:scaledSize(400), 
-        backgroundColor: 'white',marginTop:scaledSize(100),
-        borderRadius:20,alignSelf:'center',elevation:4 }}>
-        <TouchableOpacity style={{ flex:.1,right:scaledSize(20),
-         justifyContent: 'center', alignItems: 'flex-end', }} onPress={()=>setIsModalOpen(false)}>
-          <Image source={close}
-            resizeMode='contain'
-            style={{ height: scaledSize(34), 
-              width: scaledSize(34), borderRadius: scaledSize(34), 
-              left: scaledSize(8), top: scaledSize(4) }}
-          />
-        </TouchableOpacity>
+        <View style={{
+          height: scaledSize(500), width: scaledSize(400),
+          backgroundColor: 'white', marginTop: scaledSize(100),
+          borderRadius: 20, alignSelf: 'center', elevation: 4
+        }}>
+          <TouchableOpacity style={{
+             right: scaledSize(20),height:scaledSize(50),backgroundColor:'red',
+            justifyContent: 'center', alignItems: 'flex-end',
+          }} onPress={() => setIsModalOpen(false)}>
+            <Image source={close}
+              resizeMode='contain'
+              style={{
+                height: scaledSize(34),
+                width: scaledSize(34), borderRadius: scaledSize(34),
+                left: scaledSize(8), top: scaledSize(4)
+              }} />
+          </TouchableOpacity>
+          <View style={{ flex: .3, backgroundColor: 'white', 
+          justifyContent: 'flex-start', alignItems: 'center',flexDirection:'row',marginLeft:10 }}>
+            <TouchableOpacity style={{ height: 50, width: 50, backgroundColor: 'white', 
+            elevation: 4, justifyContent: 'center', alignItems: 'center',borderRadius:30 }}>
+              <Text style={{ fontSize: 16, fontFamily: Fonts.regular, color: '#537cf0' }}>Buy</Text>
+            </TouchableOpacity>
 
+            <TouchableOpacity style={{ height: 50, width: 50, backgroundColor: 'white',
+             elevation: 4, marginLeft: scaledSize(10),
+              justifyContent: 'center', alignItems: 'center',borderRadius:30 }}>
+              <Text style={{ fontSize: 16, fontFamily: Fonts.regular, color: '#537cf0' }}>Rent</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
       </Modal>
     </View>
   )
