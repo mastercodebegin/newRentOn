@@ -18,6 +18,7 @@ import CustomSpinner from '../../component/CustomSpinner';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import Slider from 'rn-range-slider';
 import PriceRangeSlider from '../../component/PriceRangeSlider';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 const width = Dimensions.get('window').width;
@@ -58,8 +59,11 @@ const ProductList = (props: any) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedIdL, setSelectedIdL] = useState(null);
+  const [selectedIdP, setSelectedIdP] = useState(null);
+  const [ cityName, setCityName] = useState("")
   const [selectedPriceId, setSelectedPriceId] = useState(0)
+  
 
   const [modalData, setModalData] = useState([
     { type: 'home', address: 'vijay nagar', id: 1, image: house, rating: 4, price: 4000000, room: 2, floor: 2 },
@@ -76,8 +80,8 @@ const ProductList = (props: any) => {
 
   const modalizeRef = useRef<Modalize>(null);
 
-  const LookingTodata = [{id:'1',title:'Buy',},{id:'2',title:'Rent/Lease'},{id:'3',title:'PG/Co-living'}]
-  const PurposeofBuyingdata = [{id:'4',title:'Residential use',},{id:'5',title:'Commercial use'}]
+  const LookingTodata = [{id:'1',title:'Buy'},{id:'2',title:'Rent/Lease'},{id:'3',title:'PG/Co-living'},{id:'4',title:'Other'}]
+  const PurposeofBuyingdata = [{id:'1',title:'Residential use'},{id:'2',title:'Commercial use'},{id:'3',title:'Other'}]
 
   useEffect(() => {
     console.log('useeffects--------------------------------', reducer);
@@ -126,11 +130,12 @@ const ProductList = (props: any) => {
     )
   }
 
-  const renderItem1=(item:any , index: number)=>{
-    const backgroundColor = item.id === selectedId ? '#f1f8ff' : '#ffffff';
+  const renderItemLooking=(item:any , index: number)=>{
+    const backgroundColor = item.id === selectedIdL ? '#f1f8ff' : '#ffffff';
+    // item.id === selectedIdL ? setBackgroundColorL("#f1f8ff"):setBackgroundColorL('#ffffff')
     return(
         <View style={{flexDirection:'row'}}>
-         <TouchableOpacity onPress={() => setSelectedId(item.id)} style={{marginTop:scaledSize(5),marginLeft:scaledSize(5)}}>
+         <TouchableOpacity onPress={() => setSelectedIdL(item.id)} style={{marginTop:scaledSize(5),marginLeft:scaledSize(5)}}>
           <View style={{borderRadius:scaledSize(18),
             borderWidth:1,
             borderColor:'lightgrey',
@@ -146,9 +151,34 @@ const ProductList = (props: any) => {
           </View>
           </TouchableOpacity>
           </View>
+            
     )
   }
 
+  const renderItemPurpose=(item:any , index: number)=>{
+    const backgroundColor = item.id === selectedIdP ? '#f1f8ff' : '#ffffff';
+    // item.id === selectedId ? setBackgroundColorP("#f1f8ff"):setBackgroundColorL('#ffffff')
+    return(
+        <View style={{flexDirection:'row'}}>
+         <TouchableOpacity onPress={() => setSelectedIdP(item.id)} style={{marginTop:scaledSize(5),marginLeft:scaledSize(5)}}>
+          <View style={{borderRadius:scaledSize(18),
+            borderWidth:1,
+            borderColor:'lightgrey',
+            // width:scaledSize(50),
+            padding:scaledSize(6),
+            paddingLeft:15,
+            paddingRight:15,
+            backgroundColor:backgroundColor,
+            // height:scaledSize(30),
+            justifyContent:'center',
+            alignItems:'center'}}>
+          <Text style={{fontFamily:Fonts.regular,color:'black',fontWeight:'600'}}>{item.title}</Text>
+          </View>
+          </TouchableOpacity>
+          </View>
+            
+    )
+  }
   
 
   const footerLoader = () => {
@@ -179,6 +209,7 @@ const ProductList = (props: any) => {
 
 
   return (
+      <KeyboardAwareScrollView>
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       {/* <TextInput placeholder='Search products . . .' style={{ width: '80%', backgroundColor: COLORS.white, left: scaledSize(50), top: scaledSize(10) }} 
         value={search} onChangeText={(value: any) => { setSearch( value )}} />
@@ -289,7 +320,8 @@ const ProductList = (props: any) => {
         </View>
 
       </Modal> */}
-      <Modalize ref={modalizeRef} snapPoint={550}>
+      <Modalize ref={modalizeRef} snapPoint={750}>
+        
       <View style={{
           height:scaledSize(600),
           borderRadius: 12,
@@ -348,7 +380,7 @@ const ProductList = (props: any) => {
          
          <FlatList 
          data={LookingTodata}
-         renderItem={({ item, index }) => renderItem1(item, index)}
+         renderItem={({ item, index }) => renderItemLooking(item, index)}
          keyExtractor={(item, index) => 'key' + index}
          horizontal={true}
          />
@@ -382,22 +414,26 @@ const ProductList = (props: any) => {
          </View> */}
           <FlatList 
          data={PurposeofBuyingdata}
-         renderItem={({ item, index }) => renderItem1(item, index)}
+         renderItem={({ item, index }) => renderItemPurpose(item, index)}
          keyExtractor={(item, index) => 'key' + index}
          horizontal={true}
          />
          
          </View>
-         <View style={{flex:1}}>
+         <View style={{flex:1,paddingBottom:scaledSize(60)}}>
           <Text style={{fontWeight:'bold',fontSize:scaledSize(15),color:'black'}}>City Name</Text>
           <View>
             <View style={{flexDirection: 'row',
   borderBottomWidth: 1,
   borderColor: '#000',
   }}>
-           <TextInput placeholder='Where?'style={{flex:1,fontSize:25}}/>
+          
+           <TextInput placeholder='Where?'
+            style={{flex:1,fontSize:25}} 
+            onChangeText={(text)=>setCityName(text)} />
            <Icon name="search1" color='#3074a6'
     size={25} style={{paddingTop:scaledSize(15)}}/>
+    
           </View>
           <View>
             <TouchableOpacity>
@@ -419,8 +455,10 @@ const ProductList = (props: any) => {
          </View>
           
         </View>
+        
          </Modalize>
     </View>
+    </KeyboardAwareScrollView>
   )
 
 }

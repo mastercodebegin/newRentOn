@@ -14,6 +14,7 @@ import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import MyOrder from '../screen/orderDetails/MyOrders'
 import CustomMap from '../screen/map/Map'
+import CreateAdd from '../screen/createadd/CreateAdd'
 
 
 const AddScreen = () => {
@@ -28,7 +29,7 @@ const AddScreen = () => {
 const screensData = [
   { name: 'Home', focus: Home, unfocus: HomeUnfocused, component: Dashboard },
   { name: 'My Adds', focus: MyAdds, unfocus: MyAdds, component: Dashboard },
-  { name: 'Create', focus: plus2, unfocus: plus2, component: Dashboard },
+  { name: 'Create', focus: plus2, unfocus: plus2, component: CreateAdd },
   { name: 'Map', focus: mapIcon, unfocus: mapIcon, component: CustomMap },
   { name: 'ProfileTab', focus: Info, unfocus: InfoUnfocused, component: Profile },
 ]
