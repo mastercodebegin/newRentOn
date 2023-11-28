@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createRef, useEffect, useState, useRef, useReducer } from 'react'
-import { View, Text, FlatList, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity, TextInput, TouchableNativeFeedback, StatusBar, ActivityIndicator, Modal } from 'react-native'
+import { View, Text, FlatList, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity, TextInput, TouchableNativeFeedback, StatusBar, ActivityIndicator, Modal, PermissionsAndroid } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Gps from 'react-native-vector-icons/MaterialIcons'
 import { Modalize } from 'react-native-modalize';
@@ -19,6 +19,9 @@ import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import Slider from 'rn-range-slider';
 import PriceRangeSlider from '../../component/PriceRangeSlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Geolocation from '@react-native-community/geolocation';
+// import { isLocationEnabled,promptForEnableLocationIfNeeded } from 'react-native-android-location-enabler';
+import { Platform } from 'react-native';
 
 
 const width = Dimensions.get('window').width;
@@ -52,8 +55,12 @@ interface SS {
 
 
 
+
+
+
 const ProductList = (props: any) => {
 
+  const [permissionGranted, setPermissionGranted] = useState<Boolean>(false)
   const [search, setSearch] = useState('')
   const [products, setProducts] = useState([])
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -82,6 +89,105 @@ const ProductList = (props: any) => {
 
   const LookingTodata = [{id:'1',title:'Buy'},{id:'2',title:'Rent/Lease'},{id:'3',title:'PG/Co-living'},{id:'4',title:'Other'}]
   const PurposeofBuyingdata = [{id:'1',title:'Residential use'},{id:'2',title:'Commercial use'},{id:'3',title:'Other'}]
+
+
+  // Loaction Permission area Start
+
+  // async function getPermissionLocation() {
+    
+  //   const res = await PermissionsAndroid.requestMultiple([
+  //   PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //   PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+  // ]);
+  //  console.log('permission check--',res);
+  // if (res)
+  // {
+  //   if (Platform.OS === 'android') {
+  //   try {
+  //         const checkEnabled: boolean = await isLocationEnabled();
+  //         console.log('checkEnabled', checkEnabled)
+  //         const enableResult = await promptForEnableLocationIfNeeded();
+  //         console.log('enableResult', enableResult);
+  //         if(enableResult==="enabled" || enableResult==="already-enabled")
+  //         {
+  //         // setPermissionGranted(true)
+  //         if(res["android.permission.ACCESS_FINE_LOCATION"] === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN || res["android.permission.ACCESS_COARSE_LOCATION"] === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN)
+  //         {
+  //         setPermissionGranted(false)
+  //         console.log("Permission not  given--",permissionGranted);
+  //         getPermissionLocation()
+  //         }else{
+  //           getCurrentCity()
+  //           setPermissionGranted(true)
+  //         }
+          
+  //         }else{
+  //           getPermissionLocation()
+  //           setPermissionGranted(false)
+  //         console.log("permission not given--",permissionGranted)
+        
+  //         }
+  //     console.log('In getPermission Location--', permissionGranted)
+  //       }
+  //     catch (error) {
+  //       setPermissionGranted(false)
+  //       getPermissionLocation()
+  //       console.error('Error getting location', error);
+  //     }
+  //   }
+  
+  // }
+  // }
+
+  // location permission area ends
+
+  // get Current loaction area starts
+
+  const getCurrentCity = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: "Location Accessing Permission",
+          message: "App needs access to your location",
+          buttonPositive: "OK", // Add the required properties
+          buttonNegative: "Cancel",
+          buttonNeutral: "Ask Me Later",
+        }
+      );
+  
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("Location permission granted");
+        Geolocation.setRNConfiguration(
+          {
+           skipPermissionRequests: false,
+           authorizationLevel: 'auto',
+           enableBackgroundLocationUpdates:true,
+           locationProvider: 'auto',
+         }
+       ) 
+  
+      Geolocation.getCurrentPosition(
+       
+         location =>{
+             console.log("coordinates--", location.coords.longitude, location.coords.latitude)
+         }
+         ,
+  
+         err => console.log("error in getcurrentposiyion", err),
+         { enableHighAccuracy: true,maximumAge: 60000 }
+  
+     );
+    } else {
+      console.log("Location Permission denied")
+      
+    }}catch (err) {
+      console.log("error",err);
+    }
+  };
+
+  // get current location area ends
+
 
   useEffect(() => {
     console.log('useeffects--------------------------------', reducer);
@@ -436,7 +542,7 @@ const ProductList = (props: any) => {
     
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>getCurrentCity()}>
               <View style={{flexDirection:'row',paddingTop:scaledSize(5)}}>
               <Gps name="gps-fixed" color='#006dde'
     size={20} />

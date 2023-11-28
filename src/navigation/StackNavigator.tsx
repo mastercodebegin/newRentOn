@@ -39,6 +39,9 @@ import OrderSuccess from "../screen/orderDetails/OrderSuccess"
 import OrderDetails from "../screen/orderDetails/OrderDetails"
 import OrderUpdates from "../screen/orderDetails/OrderUpdates"
 import searchProductDetails from "../screen/productview/searchProductDetails"
+import UserRequirements from "../screen/productList/UserRequirements"
+
+
 const Stack = createStackNavigator();
 
 
@@ -95,7 +98,8 @@ const StackNavigator = (props) => {
 const AuthNavigator = () => {
   return (
     <Stack.Navigator initialRouteName={'bottomNavigation'} screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="bottomNavigation" component={BottomTabNavigator} />
+      {/* <Stack.Screen name="bottomNavigation" component={BottomTabNavigator} /> */}
+      <Stack.Screen name="UserRequirements" component={UserRequirements} />
       <Stack.Screen name="ProductList" component={ProductdList} />
       <Stack.Screen name="PreviewOrderDetails" component={PreviewOrderDetails} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />

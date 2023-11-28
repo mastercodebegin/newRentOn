@@ -8,11 +8,20 @@ import {
   CameraOptions,
 } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/AntDesign';
+import DropDownPicker from 'react-native-dropdown-picker'
+import { scaledSize } from '../../helper/util/Utilities';
 
 
 export default function CreateAdd() {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([
+        {label: 'Buy', value: 'buy'},
+        {label: 'Rent', value: 'rent'},
+        {label: 'PG', value: 'pg'},
+    ]);
 
   const openImagePicker = () => {
     const options: ImageLibraryOptions = {
@@ -71,7 +80,7 @@ export default function CreateAdd() {
   );
 
   return (
-    <View>
+    <View style={{flex: 1}} >
       <TouchableOpacity onPress={() => openImagePicker()}>
         <Text>CreateAdd Launch Gallery</Text>
       </TouchableOpacity>
@@ -87,7 +96,37 @@ export default function CreateAdd() {
         horizontal={true}
       />
 
+  <View  style={{
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 15,
+  }}>
+    <DropDownPicker 
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+      placeholder={'Choose a category.'}
+      style={{
+        // backgroundColor: "cyan"
+        // width:scaledSize(100)
+      }}
+      containerStyle={{
+        // width:scaledSize(100)
+      }}
       
+      />
+      </View>
+        <View style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <Text>Chosen Category: {value === null ? 'none' : value}</Text>
+            </View>
     </View>
   );
 }
