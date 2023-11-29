@@ -1743,6 +1743,13 @@
     "prompts" "^2.4.0"
     "semver" "^7.5.2"
 
+"@react-native-community/datetimepicker@^7.6.2", "@react-native-community/datetimepicker@>=6.7.0":
+  "integrity" "sha512-ogZnvCmNG/lGHhEQypqz/mPymiIWD5jv6uKczg/l/aWgiKs1RDPQH1abh+R0I26aKoXmgamJJPuXKeC5eRWtZg=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-7.6.2.tgz"
+  "version" "7.6.2"
+  dependencies:
+    "invariant" "^2.2.4"
+
 "@react-native-community/eslint-config@^3.2.0":
   "integrity" "sha512-ZjGvoeiBtCbd506hQqwjKmkWPgynGUoJspG8/MuV/EfKnkjCtBmeJvq2n+sWbWEvL9LWXDp2GJmPzmvU5RSvKQ=="
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-config/-/eslint-config-3.2.0.tgz"
@@ -6590,6 +6597,13 @@
   "resolved" "https://registry.npmjs.org/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-3.0.1.tgz"
   "version" "3.0.1"
 
+"react-native-modal-datetime-picker@^17.1.0":
+  "integrity" "sha512-jfTwfaCLtBffYbQ+pOGFLM+J5HmUh3vb9rT0JrrQPjxzecdc8pNYreB1c96+mVuq8bDCvaCdIeuEsslTqLJL0Q=="
+  "resolved" "https://registry.npmjs.org/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-17.1.0.tgz"
+  "version" "17.1.0"
+  dependencies:
+    "prop-types" "^15.7.2"
+
 "react-native-modal-dropdown-v2@^1.0.1":
   "integrity" "sha512-rAJzOnFLi7HXP1pNbFow71pGQa++cwUhRp91It2yLBEOtCWclHzjfbWsz6cQTf3YFaUzNaB4G/pWycuYpLa0eg=="
   "resolved" "https://registry.npmjs.org/react-native-modal-dropdown-v2/-/react-native-modal-dropdown-v2-1.0.1.tgz"
@@ -6779,7 +6793,7 @@
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
 
-"react-native@*", "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.72.7", "react-native@> 0.50.0", "react-native@>= 0.62", "react-native@>=0.20.0", "react-native@>=0.42.0", "react-native@>=0.44.1", "react-native@>=0.46", "react-native@>=0.48.4", "react-native@>=0.57", "react-native@>=0.59.0", "react-native@>=0.59.9", "react-native@>=0.6.0", "react-native@>=0.60.0", "react-native@>=0.66.0":
+"react-native@*", "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.72.7", "react-native@> 0.50.0", "react-native@>= 0.62", "react-native@>=0.20.0", "react-native@>=0.42.0", "react-native@>=0.44.1", "react-native@>=0.46", "react-native@>=0.48.4", "react-native@>=0.57", "react-native@>=0.59.0", "react-native@>=0.59.9", "react-native@>=0.6.0", "react-native@>=0.60.0", "react-native@>=0.65.0", "react-native@>=0.66.0":
   "integrity" "sha512-dqVFojOO9rOvyFbbM3/v9/GJR355OSuBhEY4NQlMIRc2w0Xch5MT/2uPoq3+OvJ+5h7a8LFAco3fucSffG0FbA=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.72.7.tgz"
   "version" "0.72.7"
