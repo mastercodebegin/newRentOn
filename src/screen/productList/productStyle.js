@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import Color from '../../assets/colors/Color';
+import Color from '../../assets/constants/GlobalAssests';
 import { heightFromPercentage, scaledSize, widthFromPercentage } from '../../helper/util/Utilities'
 import { COLORS } from '../../utilits/GlobalAssets';
 import { Colors } from 'react-native-paper';

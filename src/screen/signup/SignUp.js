@@ -7,14 +7,14 @@ import {
     TouchableNativeFeedback
 } from 'react-native'
 // import { Input } from 'react-native-elements'
-import headerImage from '../../assets/shop.png'
+import { Logo,Color } from '../../assets/constants/GlobalAssests'
 import inputFieldIconPath from '../../assets/headerImage.png'
 import emailIcon from '../../assets/user.png'
 import passwordIcon from '../../assets/password.png'
 
 
 // import CustomIcon from '../../../CustomIcon.js'
-import Color from '../../assets/colors/Color';
+
 import CustomeButton from '../../helper/util/CustomeButton'
 
 
@@ -27,7 +27,7 @@ export default SignUp = ({ navigation }) => {
     const [isEmailFocused, setIsEmailFocused] = React.useState(false)
     const [isPasswordFocused, setIsPasswordFocused] = React.useState(false)
     const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = React.useState(false)
-    const placeholderColor = 'black'
+    const placeholderColor = '#9294a7'
 
     // [handleFocus,sethandleFocus] = React.useState(isFocused=false )
     const handleFocus = (value) => {
@@ -63,8 +63,8 @@ export default SignUp = ({ navigation }) => {
     return (
         <View style={styles.mainView}>
             <StatusBar backgroundColor={'white'} />
-            <View style={styles.header}>
-                <Image source={headerImage} style={styles.headerImage} resizeMode={'center'} />
+            <View style={styles.logo}>
+                <Image source={Logo.SignUpLogo} style={styles.logoImage} resizeMode={'center'} />
             </View>
             <ScrollView>
                 <View style={styles.containor}>
@@ -144,7 +144,7 @@ export default SignUp = ({ navigation }) => {
                         </View>
 
                         <View style={[styles.inputAndIconFieldBorderColorView,
-                        { borderColor: isPasswordFocused ? Color.activeBorderColor : Color.inActiveBorderColor, marginTop: 25 }]}>
+                        { borderColor: isPasswordFocused ? Color.activeBorderColor : Color, marginTop: 25 }]}>
                             <View style={[styles.inputAndIconFieldBorderColorView, { flex: 1, borderBottomWidth: 0 }]}>
                                 <Image source={emailIcon} style={styles.inputFieldIcon} />
                                 <TextInput
@@ -174,7 +174,7 @@ export default SignUp = ({ navigation }) => {
                         <Text style={{ fontSize: 14, color: 'gray', }}>
                             Already Have an Account   </Text>
                         <TouchableOpacity onPress={() => { navigateTo('Login') }}>
-                            <Text style={{ color: Color.activeBorderColor, fontSize: 16, fontWeight: 'bold' }}>Login</Text>
+                            <Text style={{ color: "#5c7bed", fontSize: 16, fontWeight: 'bold' }}>Login</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff'
     },
-    header: {
+    logo: {
         height: 150,
         // backgroundColor: 'tomato',
         marginTop: 10,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
         // width:'100%'
     },
-    headerImage: {
+    logoImage: {
         height: 150,
         width: '90%',
         backgroundColor: null

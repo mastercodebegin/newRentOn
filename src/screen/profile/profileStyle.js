@@ -1,6 +1,6 @@
 import React from 'react'
 import {StyleSheet, Dimensions} from 'react-native'
-import Color from '../../assets/colors/Color';
+import Color from '../../assets/constants/GlobalAssests';
 import {heightFromPercentage,scaledSize,widthFromPercentage} from '../../helper/util/Utilities'
 import { COLORS } from '../../utilits/GlobalAssets';
 const width = Dimensions.get('window').width;

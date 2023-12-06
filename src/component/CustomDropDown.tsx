@@ -8,8 +8,10 @@ export default function CustomDropDown({ data, onChange,label,defaultValue,style
     const [isFocus, setIsFocus] = useState(false)
     const [value, setValue] = useState('');
 
+  
 
     return (
+        <View>
         <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: '#E0DFE4' },style]}
             placeholderStyle={styles.placeholderStyle}
@@ -36,6 +38,7 @@ export default function CustomDropDown({ data, onChange,label,defaultValue,style
                 setIsFocus(false);
             }}
         ></Dropdown>
+        </View>
     )
 }
 
@@ -51,6 +54,7 @@ const styles = StyleSheet.create({
         padding:scaledSize(6),
         borderColor: '#E0DFE4',
         borderRadius: scaledSize(10),
+        // marginBottom:scaledSize(10)
         // borderBottomWidth: 0.5,
     },
     itemContainer:{

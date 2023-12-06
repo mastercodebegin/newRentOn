@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import { View, Text,StyleSheet,Image,TextInput } from 'react-native'
-import Color from '../../assets/colors/Color'
+import Color from '../../assets/constants/GlobalAssests'
 import emailIcon from '../../assets/user.png'
 
 
@@ -12,7 +12,7 @@ export default function InputField({props,onBlur,onChangeText,placeholder,imageI
     }
     return (
         <View style={[styles.inputAndIconFieldBorderColorView,
-            { borderColor: isFieldFocused ? Color.activeBorderColor : Color.inActiveBorderColor, }]}>
+            { borderColor: isFieldFocused ? Color.activeBorderColor : "#d1d1d1", }]}>
                 <Image source={emailIcon} style={styles.inputFieldIcon} />
                 {/* test granch */}
                 <TextInput
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: 2,
-        borderColor: Color.inActiveBorderColor
+        borderColor: "#d1d1d1"
     },
     inputFieldIcon: {
         height: 20,

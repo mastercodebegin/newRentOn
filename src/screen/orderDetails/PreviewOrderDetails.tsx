@@ -21,7 +21,7 @@ import { getAllAddress, hideAddressModalWindow, showAddressModalWindow } from '.
 import { buyOrderWithCOD, clearOrderState, createOrder, updateOrder, } from './OrderSlice'
 import { CutomToastFail, CutomToastSuccess } from '../../component/CustomToastMessage'
 import CustomSpinner from '../../component/CustomSpinner'
-import Color from '../../assets/colors/Color'
+import Color from '../../assets/constants/GlobalAssests'
 import ConfirmationModal from '../../component/ConfirmationModal'
 
 

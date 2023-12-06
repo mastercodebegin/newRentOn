@@ -18,7 +18,7 @@ import passwordIcon from '../../assets/password.png'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native'
 import { getMyProfileInitiate, loginInitiate } from '../../context/actions/Actions'
-import Color from '../../assets/colors/Color';
+import Color from '../../assets/constants/GlobalAssests';
 import { styles } from './LoginStyle'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
