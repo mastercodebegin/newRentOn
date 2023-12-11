@@ -2,7 +2,8 @@ export const UrlConstants = {
     //BASE_URL:'https://reqres.in/api/users/2',
   // BASE_URL: 'http://52.201.90.251:8082/api/',
   // BASE_URL: 'http://52.201.90.251:8082/api/',
-  BASE_URL: 'http://192.168.1.109:9090/',
+  BASE_URL: '',
+  // BASE_URL: 'http://192.168.1.109:9090/',
   // BASE_URL: 'http://api.famawork.com:8082/api/',
   // PAYMENT_GATEWAY_KEY:'rzp_test_mKVLf9P1vjm8DX'
   PAYMENT_GATEWAY_KEY:'rzp_test_9O4DmooPw5kQea',

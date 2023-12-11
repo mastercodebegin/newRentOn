@@ -27,6 +27,32 @@
             payload: action
         }
     }
+    export const signInitiate = (requestData) => {
+        console.log('SignIn initiate action',requestData)
+        return{
+            type: ActionsTypes.SIGNIN_INITIATE,
+            payload: requestData
+        }
+    }
+
+    export const signInSuccess = (response) => {
+        // console.log('displayed in action function',response)
+        
+            return {
+                type: ActionsTypes.SIGNIN_SUCCESS,
+                payload: response,
+                status:response.status
+                
+            }
+
+       
+    }
+    export const signInFail = (action) => {
+        return {
+            type: ActionsTypes.SIGNIN_FAIL,
+            payload: action
+        }
+    }
         export const getMyProfileInitiate = () => {
             console.log('getmyprofile initiate action------')
             return {

@@ -1,7 +1,7 @@
 import React from "react"
 import { ActivityIndicator } from 'react-native-paper'
 import Spinner from 'react-native-loading-spinner-overlay';
-import Color from "../assets/constants/GlobalAssests";
+import {Color} from "../assets/constants/GlobalAssests";
 
 const SpinnerHelper = ({ isLoad }) => {
     return (

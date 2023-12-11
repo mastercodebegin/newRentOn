@@ -144,12 +144,12 @@ export default SignUp = ({ navigation }) => {
                         </View>
 
                         <View style={[styles.inputAndIconFieldBorderColorView,
-                        { borderColor: isPasswordFocused ? Color.activeBorderColor : Color, marginTop: 25 }]}>
+                        { borderColor: isConfirmPasswordFocused ? Color.activeBorderColor : Color.inActiveBorderColor, marginTop: 25 }]}>
                             <View style={[styles.inputAndIconFieldBorderColorView, { flex: 1, borderBottomWidth: 0 }]}>
                                 <Image source={emailIcon} style={styles.inputFieldIcon} />
                                 <TextInput
-                                    onFocus={() => handleFocus('password')}
-                                    onBlur={() => handleBlur('password')}
+                                    onFocus={() => handleFocus('confirmpassword')}
+                                    onBlur={() => handleBlur('confirmpassword')}
                                     secureTextEntry={isPasswordShow}
                                     style={styles.textInputField} placeholder={'Confirm-Password'}
                                     placeholderTextColor={placeholderColor} />

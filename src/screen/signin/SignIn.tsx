@@ -1,59 +1,176 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextInput } from 'react-native-paper'
 import { scaledSize } from '../../helper/util/Utilities'
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { Fonts } from '../../utilits/GlobalAssets'
-import { Logo } from '../../assets/constants/GlobalAssests'
+import { Logo,Color } from '../../assets/constants/GlobalAssests'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { ScrollView } from 'react-native-gesture-handler'
+import { useSelector, useDispatch } from 'react-redux';
+import CustomeButton from '../../helper/util/CustomeButton'
+import SpinnerHelper from '../../helper/SpinnerHelper';
+import { getMyProfileInitiate } from '../../context/actions/Actions';
+import SignInReducer from './SignInReducer';
+import { getSignInInitiate } from './SignInSlice';
+// import { RootState } from '../../context/reducers/RootReducer';
 
-const SignIn = () => {
+const SignIn = ({navigation}) => {
 
-    const [password, setPassword] = useState('');
-    const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+    
+    // const [email, setEmail] = React.useState('aliaijaz96@gmail.com')
+    // const [password, setPassword] = React.useState('Aijaz@96')
+    const [isPasswordSecure, setIsPasswordSecure] = useState(true)
+    const [isEmailFocused, setIsEmailFocused] = React.useState(false)
+    const [isPasswordFocused, setIsPasswordFocused] = React.useState(false)
+    const [isSubmitted, setIsSubmitted] = React.useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    // const response = useSelector((state:RootState) => state.SignInSlice)
+    const response = useSelector((state) => state)
+
+    const dispatch = useDispatch()
+
+
+
+    useEffect(()=>{
+        console.log('reducer====',response)
+        
+    },)
+   const stopLoader = () => {
+        setIsLoading(false)
+
+    }
+
+    const handleFocus = (value) => {
+        if (value == 'email') { setIsEmailFocused(true) }
+        else if (value == 'password') { setIsPasswordFocused(true) }
+        else { console.warn('didnt get value') }
+    }
+
+    const handleBlur = (value) => {
+        if (value == 'email') { setIsEmailFocused(false) }
+        else if (value == 'password') { setIsPasswordFocused(false) }
+        else { console.warn('didnt get value') }
+    }
+
+    const LoginSchema = Yup.object({
+        // email: Yup.string().required('Required').email('Invalid email'),
+        email: Yup.string().email('Invalid email').required('Required'),
+        password: Yup.string().min(2, 'Too Short!').max(10, 'Too Long!').required('Required')
+    })
+
+    const submit = (values) => {
+        console.log('=================',values)
+        // console.log('values')
+        // let data = {
+        //     name:email,
+        //     job:password
+        // }
+        //@ts-igonre
+        dispatch(getSignInInitiate(values))
+        setIsSubmitted(true)
+        // setIsLoading(true)
+        // dispatch(loginInitiate(data))
+
+    }
+
+
+    const navigateTo = (route) => {
+        navigation.navigate(route)
+
+    }
+
+
+
+
+    
+
+    useEffect(() => {
+        if (isSubmitted == true) {
+
+            setIsLoading(true)
+
+            if (response) {
+              console.log("response in SignIn",response)
+                    // navigateTo('UserRequirements')
+
+                }
+                else {
+                    console.log('Error', response)
+                    alert(response)
+
+                
+            }
+        }
+        console.log("response--",response)
+    },[])
 
     return (
-        <View style={{ flex: 1,backgroundColor:'#ffffff', justifyContent: 'center' }}>
+        <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={LoginSchema}
+        onSubmit={(values) => submit(values)} 
+    >
+        {({ handleChange, handleBlur,touched, errors, handleSubmit, values }) => (
+        <View style={styles.mainView}>
+
+            <View style={styles.logo} >
+                <Image source={Logo.SignUpLogo} style={styles.logoImage} resizeMode={'center'} />
+            </View>
+
             <ScrollView>
 
-                <View style={{ flex: 1, alignItems: 'center', marginTop: 80 }}>
-                    <View style={styles.imageView} >
-                        <Image source={Logo.SignUpLogo} style={styles.image} resizeMode={'center'}/>
-                    </View>
-                    <View style={{ flex: 0.1, marginTop: scaledSize(20), justifyContent: 'space-around', backgroundColor: '#ffffff', alignItems: 'center' }}>
+                <View style={styles.container}>
+
+                    <View style={styles.headingView}>
                         <Text style={styles.headingStyle}>Welcomen To Saifty!</Text>
                         <Text style={styles.textStyle}>Keep your data safe!</Text>
                     </View>
-                    <View style={{ flex: 0.3, height: scaledSize(160), marginTop: scaledSize(20), backgroundColor: '#ffffff', justifyContent: 'space-around', borderRadius: scaledSize(10), padding: scaledSize(5) }}>
-                        <View style={{ backgroundColor: '#f5f5f5', borderRadius: scaledSize(10), padding: scaledSize(5) }}>
-                            <Text style={{ color: '#9294a7',marginLeft:scaledSize(10) }}>Email</Text>
-                            <TextInput style={styles.textInput} underlineColor="transparent" />
+                    <View style={styles.inputFieldMainView}>
+                        <View style={[styles.inputFieldView,{ borderColor: isEmailFocused ? Color.activeBorderColor : Color.inActiveBorderColor, marginTop: 10 }]}>
+                            <Text style={styles.inputFieldLable}>Email</Text>
+                            <TextInput 
+                            style={styles.inputTextStyle}
+                            onFocus={() => handleFocus('email')}
+                            onBlur={() => handleBlur('email')}
+                            value={values.email}
+                            underlineColor="transparent"
+                            onChangeText={handleChange('email')} 
+                            />
                         </View>
-                        <View style={{ backgroundColor: '#f5f5f5', borderRadius: scaledSize(10), padding: scaledSize(5) }}>
-                            <Text style={{ color: '#9294a7',marginLeft:scaledSize(10) }}>Password</Text>
+
+                        {errors.email && touched.email ? <View style={{marginTop:scaledSize(20),left:scaledSize(15)}}><Text style={{color:'red'}}>{errors.email}</Text></View> : null}
+                        <View style={[styles.inputFieldView,{ borderColor: isPasswordFocused ? Color.activeBorderColor : Color.inActiveBorderColor, marginTop: 25 }]}>
+                            <Text style={styles.inputFieldLable}>Password</Text>
                             <TextInput
                                 secureTextEntry={isPasswordSecure}
-                                style={styles.textInput}
+                                style={styles.inputTextStyle}
+                                onFocus={() => handleFocus('password')}
+                                onBlur={() => handleBlur('password')}
                                 right={
                                     <TextInput.Icon
-                                        name={() => <Icon name={isPasswordSecure ? "eyeo" : "eye"} size={18} color='black' />} // where <Icon /> is any component from vector-icons or anything else
+                                        name={() => <Icon name={isPasswordSecure ? "eyeo" : "eye"} style={{top:scaledSize(-12)}} size={18} color='black' />} // where <Icon /> is any component from vector-icons or anything else
                                         onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}
                                     />
                                 }
-                                value={password}
-                                onChangeText={text => setPassword(text)}
+                                value={values.password}
+                                onChangeText={handleChange('password')}
                                 // underlineColorAndroid='#FFF'
                                 underlineColor="transparent"
                             />
                         </View>
+                        {touched.password && errors.password && <View style={{marginTop:scaledSize(20),left:scaledSize(15)}}><Text style={{color:'red'}}>{errors.password}</Text></View>}
 
                     </View>
-                    <View>
-                        <TouchableOpacity>
+                    <View style={styles.buttonView}>
+                        {/* <TouchableOpacity onPress={() => submit()} >
                             <View style={styles.buttonView}>
                                 <Text style={styles.loginButton}>Login</Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                         <CustomeButton name={'Sign-up'} onPress={handleSubmit} style={{backgroundColor:Color.activeBorderColor}}/>
+
                     </View>
                     <View>
                         <TouchableOpacity>
@@ -63,9 +180,9 @@ const SignIn = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.registerView}>
-                        
-                        <Text style={{fontSize:scaledSize(16),color:'#777a8c',marginRight:scaledSize(5)}}>Don't have an account?</Text>
-                        <TouchableOpacity>
+
+                        <Text style={{ fontSize: scaledSize(16), color: '#777a8c', marginRight: scaledSize(5) }}>Don't have an account?</Text>
+                        <TouchableOpacity onPress={()=>{navigateTo('SignUp')}}>
                             <View >
                                 <Text style={styles.passwordText}>Register!</Text>
                             </View>
@@ -73,7 +190,9 @@ const SignIn = () => {
                     </View>
                 </View>
             </ScrollView>
+            {/* <SpinnerHelper isLoad={response?.isLoading ? true : false} /> */}
         </View>
+        )}</Formik>
     )
 }
 
@@ -81,40 +200,82 @@ export default SignIn
 
 const styles = StyleSheet.create({
 
+    mainView : { 
+        flex: 1, 
+        backgroundColor: '#ffffff', 
+        justifyContent: 'center' 
+    },
+    
+    container :{ 
+        flex: 1, 
+        alignItems: 'center' 
+    },
+
+    headingView : { 
+        flex: 0.1, 
+        marginTop: scaledSize(25), 
+        justifyContent: 'space-around', 
+        backgroundColor: '#ffffff', 
+        alignItems: 'center' 
+    },
+    
     headingStyle: {
         color: 'black',
         fontSize: scaledSize(20),
         fontWeight: 'bold'
     },
 
-    textInput: {
+    inputTextStyle: {
         backgroundColor: '#f5f5f5',
         width: scaledSize(300),
-        height: scaledSize(30),
+        height: scaledSize(25),
         color: 'black'
     },
 
-    registerView:{
-        backgroundColor:'#ffffff',
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
-        marginTop:scaledSize(150)
+    inputFieldMainView : { 
+        flex: 0.3, 
+        height: scaledSize(160), 
+        marginTop: scaledSize(25), 
+        backgroundColor: '#ffffff', 
+        justifyContent: 'space-around', 
+        borderRadius: scaledSize(10), 
+        padding: scaledSize(10) 
+    },
+
+    inputFieldView : { 
+        backgroundColor: '#f5f5f5', 
+        borderRadius: scaledSize(10), 
+        padding: scaledSize(5) 
+    },
+
+    inputFieldLable : { 
+        color: '#9294a7', 
+        marginLeft: scaledSize(10),
+        top:3
+        // paddingTop: scaledSize(10)
+    },
+
+    registerView: {
+        backgroundColor: '#ffffff',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: scaledSize(180)
     },
 
     textStyle: {
         fontSize: scaledSize(15),
         color: '#777a8c',
-        marginTop:scaledSize(8)
+        marginTop: scaledSize(8)
     },
 
-    passwordView:{
-        margin:scaledSize(10)
+    passwordView: {
+        margin: scaledSize(10)
     },
-    passwordText:{
-        color:'#5c7bed',
-        fontSize:scaledSize(16),
-        fontWeight:'500'
+    passwordText: {
+        color: '#5c7bed',
+        fontSize: scaledSize(16),
+        fontWeight: '500'
     },
 
     buttonView: {
@@ -129,18 +290,20 @@ const styles = StyleSheet.create({
 
     },
 
-    loginButton:{
-        fontSize:scaledSize(15),
-        color:'#fff',
-        fontWeight:'bold'
+    loginButton: {
+        fontSize: scaledSize(15),
+        color: '#fff',
+        fontWeight: 'bold'
     },
-    imageView: {
-        flex: 0.2,
-        // backgroundColor: 'yellow'
+    logo: {
+        marginTop: 40,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
-    image: {
-        width: scaledSize(138),
+    logoImage: {
+        // width: scaledSize(180),
+        width: '90%',
         height: scaledSize(94),
 
     }

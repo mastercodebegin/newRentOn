@@ -70,6 +70,8 @@ export default function CreateAdd() {
     setSelectedImages(newImages);
   };
 
+  
+
   const renderImageItem = ({ item, index }: { item: string; index: number }) => (
     <View style={{ position: 'relative' }}>
       <Image source={{ uri: item }} style={styles.image} />

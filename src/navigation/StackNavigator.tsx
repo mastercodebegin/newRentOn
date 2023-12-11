@@ -18,6 +18,7 @@ import ProductDetails from "../screen/productview/productDetails"
 import Security from "../screen/profile/Security"
 import Profile from "../screen/profile/Profile"
 import Stepper from "../screen/splash/Stepper"
+import CustomMap from "../screen/map/Map"
 // import { CustomDrawer } from "../component/CustomDrawer"
 // import Stepper from "../screen/splash/Stepper1"
 // import WelcomeScreen from "../screen/welcomeScreen/WelcomeScreen"
@@ -100,6 +101,7 @@ const AuthNavigator = () => {
   return (
     <Stack.Navigator initialRouteName={'bottomNavigation'} screenOptions={{ headerShown: false }}>
       {/* <Stack.Screen name="bottomNavigation" component={BottomTabNavigator} /> */}
+      <Stack.Screen name="Map" component={CustomMap} />
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="UserRequirements" component={UserRequirements} />
@@ -135,7 +137,7 @@ const LoginNavigator = () => {
     {/* <Stack.Screen name="Stepper" options={{title:''}} component={Stepper} />
         <Stack.Screen name="Welcome" options={{title:''}}  component={WelcomeScreen} /> */}
     {/* <Stack.Screen name="Dashboard" options={{title:''}} component={DrawerNavigator} /> */}
-    <Stack.Screen name="Login" component={Login} />
+    {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
     {/* <Stack.Screen name="Account" component={AccountScreen}/>
         <Stack.Screen name="security" component={SecurityScreen}/>
         <Stack.Screen name="Details" component={DetailsScreen} />
@@ -159,7 +161,7 @@ const MainNavigator = () => {
     {/* <Stack.Screen name="Stepper" options={{title:''}} component={Stepper} />
         <Stack.Screen name="Welcome" options={{title:''}}  component={WelcomeScreen} /> */}
     {/* <Stack.Screen name="Dashboard" options={{title:''}} component={DrawerNavigator} /> */}
-    <Stack.Screen name="Login" component={Login} />
+    {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
     {/* <Stack.Screen name="Account" component={AccountScreen}/>
         <Stack.Screen name="security" component={SecurityScreen}/>
         <Stack.Screen name="SignUp" component={SignUp} />

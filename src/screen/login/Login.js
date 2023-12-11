@@ -18,7 +18,7 @@ import passwordIcon from '../../assets/password.png'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native'
 import { getMyProfileInitiate, loginInitiate } from '../../context/actions/Actions'
-import Color from '../../assets/constants/GlobalAssests';
+import {Color} from '../../assets/constants/GlobalAssests';
 import { styles } from './LoginStyle'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
@@ -73,7 +73,8 @@ export default Login = ({ navigation }) => {
                 }
             }
         }
-    })
+        console.log("response--",response)
+    },[])
 
     const handleFocus = (value) => {
         if (value == 'email') { setIsEmailFocused(true) }
@@ -168,7 +169,7 @@ export default Login = ({ navigation }) => {
                         </View>
                     </ScrollView>
 
-                    <SpinnerHelper isLoad={response.isLoading ? true : false} />
+                    <SpinnerHelper isLoad={response?.isLoading ? true : false} />
                 </View>
             )}</Formik>
 
