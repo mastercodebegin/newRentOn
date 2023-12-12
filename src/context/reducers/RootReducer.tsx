@@ -6,14 +6,16 @@ import ProductsSlice from '../../screen/productList/ProductsSlice'
 import AddressSlice from '../../screen/address/AddressSlice'
 import orderSlice from '../../screen/orderDetails/OrderSlice'
  import ModalWindowsSlice from '../../utilits/ModalWindowsSlice'
+ import SignInSlice from '../../screen/signin/SignInSlice'
 
-const RootReducer = ({
+const RootReducer = combineReducers({
 
     DashBoardSlice,
     ProductsSlice,
     AddressSlice,
     orderSlice,
-    ModalWindowsSlice
+    ModalWindowsSlice,
+    SignInSlice
 })
 
 

@@ -5,6 +5,7 @@ import { Alert, Platform } from 'react-native';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, PermissionsAndroid } from 'react-native';
 import Map from '@rnmapbox/maps';
 import UserLocation from '@rnmapbox/maps';
+import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 import ColorfulCard from '@freakycoder/react-native-colorful-card';
 import Geolocation from '@react-native-community/geolocation';
 import { getUUIDV4 } from '../../helper/util/Utilities';
@@ -60,15 +61,15 @@ const CustomMap: React.FC = () => {
       PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
     ]);
     console.log('permission check--', res);
-    if (res) {
+   
 
-    }
+
   }
 
   useEffect(() => {
    
 
-    //getPermissionLocation()
+    getPermissionLocation()
 
   }, [permissionGranted, reload])
 
@@ -211,6 +212,39 @@ const CustomMap: React.FC = () => {
         animationMode={'flyTo'}
         animationDuration={6000}
       />
+
+<Map.PointAnnotation
+                        id="destinationPoint"
+                        coordinate={destinationCoords}>
+                        <View style={styles.destinationIcon}>
+                            <Ionicons name="storefront" size={24} color="#E1710A" />
+                        </View>
+                    </Map.PointAnnotation>
+
+
+                    <Map.PointAnnotation
+                        id="destinationPoint"
+                        coordinate={[75.8867677,22.6925302]}>
+                        <View style={styles.destinationIcon}>
+                            <Ionicons name="storefront" size={24} color="#E1710A" />
+                        </View>
+                    </Map.PointAnnotation>
+
+                    <Map.PointAnnotation
+                        id="destinationPoint"
+                        coordinate={[75.88500607075076,22.700492456617543]}>
+                        <View style={styles.destinationIcon}>
+                            <Ionicons name="storefront" size={24} color="#E1710A" />
+                        </View>
+                    </Map.PointAnnotation>
+
+                    <Map.PointAnnotation
+                        id="destinationPoint"
+                        coordinate={[75.88460359884049,22.724585546072984]}>
+                        <View style={styles.destinationIcon}>
+                            <Ionicons name="storefront" size={24} color="#E1710A" />
+                        </View>
+                    </Map.PointAnnotation>
         </Map.MapView>
 
      
