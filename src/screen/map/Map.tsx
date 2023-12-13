@@ -1,13 +1,15 @@
 // import { useRoute } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Platform } from 'react-native';
+import { Alert, Modal, Platform } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, PermissionsAndroid } from 'react-native';
 import Map from '@rnmapbox/maps';
 import UserLocation from '@rnmapbox/maps';
-import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Ionicons from 'react-native-vector-icons/FontAwesome5'
 import ColorfulCard from '@freakycoder/react-native-colorful-card';
 import Geolocation from '@react-native-community/geolocation';
+import Popover from "react-native-popover-view";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getUUIDV4 } from '../../helper/util/Utilities';
 
 
@@ -39,6 +41,7 @@ const CustomMap: React.FC = () => {
   const [duration, setDuration] = useState(null);
   const [permissionGranted, setPermissionGranted] = useState<Boolean>(false)
   const [reload, setReload] = useState<Boolean>(false)
+  const [isVisible, setIsVisible] = useState(false)
 
   const APIKEY = "pk.eyJ1Ijoic2hvcGF4IiwiYSI6ImNsN3Zlc3IyYjAyYXEzd3BiamljNTlsNzEifQ.UKKhtejhtvJTtfzwQHa1XA";
   const [destinationCoords, setDestinationCoords] = useState<[number, number]>([
@@ -52,7 +55,7 @@ const CustomMap: React.FC = () => {
 
   // const {store} = route.params;
 
-
+  const insets = useSafeAreaInsets();
 
   async function getPermissionLocation() {
 
@@ -61,17 +64,22 @@ const CustomMap: React.FC = () => {
       PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
     ]);
     console.log('permission check--', res);
-   
+
 
 
   }
 
+  const data =[{name:'first',coords:{longitude:75.8867677,latitude:22.6925421},iconname:'baby-carriage'},
+                {name:'Second',coords:{longitude:75.88302286574294,latitude:22.711779694040896},iconname:'book-open'}]
+
   useEffect(() => {
-   
+
 
     getPermissionLocation()
 
   }, [permissionGranted, reload])
+
+  const [showPopover, setShowPopover] = useState(false);
 
   // useEffect(() => {
   //   //console.log(store.longitude);
@@ -143,6 +151,16 @@ const CustomMap: React.FC = () => {
   //     }
   //     }
   //   }
+  const handlePopOver = () => {
+    console.log("popver open");
+    setIsVisible(!isVisible)
+    setShowPopover(true)
+  }
+  const handleClosePopOver = () => {
+    console.log("popOver close");
+
+    setShowPopover(false)
+  }
 
 
 
@@ -203,52 +221,51 @@ const CustomMap: React.FC = () => {
 
         style={styles.map}
         zoomEnabled={true}
-        // styleURL=""
+        // styleURL="mapbox://styles/shopax/clmsvy6qp02ds01pj1tlke9je"
         rotateEnabled={true}
       >
-         <Map.Camera
-        zoomLevel={14}
-        centerCoordinate={[75.88600432946546,22.696400141312875]}
-        animationMode={'flyTo'}
-        animationDuration={6000}
-      />
+        <Map.Camera
+          zoomLevel={14}
+          centerCoordinate={[75.88600432946546, 22.696400141312875]}
+          animationMode={'flyTo'}
+          animationDuration={6000}
+        />
 
-<Map.PointAnnotation
-                        id="destinationPoint"
-                        coordinate={destinationCoords}>
-                        <View style={styles.destinationIcon}>
-                            <Ionicons name="storefront" size={24} color="#E1710A" />
-                        </View>
-                    </Map.PointAnnotation>
+{/* <Map.PointAnnotation
+          id="destinationPoint"
+          coordinate={[75.88460359884049, 22.724585546072984]}
+          onSelected={() => handlePopOver()}>
+          <TouchableOpacity style={styles.destinationIcon}>
+            <Ionicons name="storefront" size={24} color="#E1710A" />
+
+          </TouchableOpacity>
+        </Map.PointAnnotation> */}
+
+       {data.map((item:any,index:any)=>(
+          <Map.PointAnnotation
+          id={`${index}`}
+          key={index}
+          coordinate={[item.coords.longitude, item.coords.latitude]}
+          onSelected={() => handlePopOver()}>
+          <TouchableOpacity style={styles.destinationIcon}>
+            <Ionicons name={item.iconname} size={24} color="#E1710A" />
+
+          </TouchableOpacity>
+        </Map.PointAnnotation>
+       ))}
+      </Map.MapView>
 
 
-                    <Map.PointAnnotation
-                        id="destinationPoint"
-                        coordinate={[75.8867677,22.6925302]}>
-                        <View style={styles.destinationIcon}>
-                            <Ionicons name="storefront" size={24} color="#E1710A" />
-                        </View>
-                    </Map.PointAnnotation>
+      <Modal
+        visible={isVisible}
+        transparent>
+        <View style={{ flex: .8,  }}>
+          <TouchableOpacity onPress={() => setIsVisible(false)}>
+            <Text style={{color:'black'}}>Closeteetestttt</Text>
+          </TouchableOpacity>
+        </View>
 
-                    <Map.PointAnnotation
-                        id="destinationPoint"
-                        coordinate={[75.88500607075076,22.700492456617543]}>
-                        <View style={styles.destinationIcon}>
-                            <Ionicons name="storefront" size={24} color="#E1710A" />
-                        </View>
-                    </Map.PointAnnotation>
-
-                    <Map.PointAnnotation
-                        id="destinationPoint"
-                        coordinate={[75.88460359884049,22.724585546072984]}>
-                        <View style={styles.destinationIcon}>
-                            <Ionicons name="storefront" size={24} color="#E1710A" />
-                        </View>
-                    </Map.PointAnnotation>
-        </Map.MapView>
-
-     
-
+      </Modal>
     </View>
   );
 };
@@ -284,8 +301,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   destinationIcon: {
-    width: 30,
-    height: 30,
+    width: 250,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },

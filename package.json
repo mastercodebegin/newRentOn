@@ -54,6 +54,7 @@
     "react-native-otp-textinput": "^0.0.8",
     "react-native-pager-view": "^5.4.6",
     "react-native-paper": "^4.9.2",
+    "react-native-popover-view": "^5.1.8",
     "react-native-ratings": "^8.1.0",
     "react-native-razorpay": "^2.3.0",
     "react-native-reanimated": "^3.5.4",
