@@ -3,27 +3,43 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Alert, Modal, Platform } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, PermissionsAndroid } from 'react-native';
-import Map from '@rnmapbox/maps';
+import Map, { Logger } from '@rnmapbox/maps';
 import UserLocation from '@rnmapbox/maps';
 import Ionicons from 'react-native-vector-icons/FontAwesome5'
 import ColorfulCard from '@freakycoder/react-native-colorful-card';
 import Geolocation from '@react-native-community/geolocation';
 import Popover from "react-native-popover-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getUUIDV4 } from '../../helper/util/Utilities';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { SliderBox } from "react-native-image-slider-box";
+import { deviceWidth, getUUIDV4, scaledSize } from '../../helper/util/Utilities';
 
 
 
 
 
+Map.setWellKnownTileServer('Mapbox')
 Map.setAccessToken("pk.eyJ1Ijoic2hvcGF4IiwiYSI6ImNsN3Zlc3IyYjAyYXEzd3BiamljNTlsNzEifQ.UKKhtejhtvJTtfzwQHa1XA");
 // MapboxGL.setConnected(true)
 Map.setTelemetryEnabled(false);
-Map.setWellKnownTileServer('Mapbox')
 
 Geolocation.setRNConfiguration({
   skipPermissionRequests: false,
   authorizationLevel: 'auto',
+});
+
+// edit logging messages
+Logger.setLogCallback(log => {
+  const { message } = log;
+
+  // expected warnings - see https://github.com/mapbox/mapbox-gl-native/issues/15341#issuecomment-522889062
+  if (
+    message.match('Request failed due to a permanent error: Canceled') ||
+    message.match('Request failed due to a permanent error: Socket Closed')
+  ) {
+    return true;
+  }
+  return false;
 });
 
 const routeProfiles = [
@@ -42,6 +58,10 @@ const CustomMap: React.FC = () => {
   const [permissionGranted, setPermissionGranted] = useState<Boolean>(false)
   const [reload, setReload] = useState<Boolean>(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [imgUrls, setImgUrls] = useState([{}])
+  const [price, setPrice] = useState('')
+  const [heading, setHeading ] = useState('')
+  const [description , setDescription] = useState('')
 
   const APIKEY = "pk.eyJ1Ijoic2hvcGF4IiwiYSI6ImNsN3Zlc3IyYjAyYXEzd3BiamljNTlsNzEifQ.UKKhtejhtvJTtfzwQHa1XA";
   const [destinationCoords, setDestinationCoords] = useState<[number, number]>([
@@ -69,8 +89,13 @@ const CustomMap: React.FC = () => {
 
   }
 
-  const data =[{name:'first',coords:{longitude:75.8867677,latitude:22.6925421},iconname:'baby-carriage'},
-                {name:'Second',coords:{longitude:75.88302286574294,latitude:22.711779694040896},iconname:'book-open'}]
+  const data = [{
+    name: 'first', coords: { longitude: 75.8867677, latitude: 22.6925421 }, type: "office", price: '2709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
+    { uri: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg' }],
+    heading: 'available shop on plasia', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+  },
+  { name: 'Second', coords: { longitude: 75.88302286574294, latitude: 22.711779694040896 }, type: 'home' },
+  { name: 'third', coords: { longitude: 75.8846963870179, latitude: 22.72464600641459 }, type: 'shop' }]
 
   useEffect(() => {
 
@@ -151,8 +176,15 @@ const CustomMap: React.FC = () => {
   //     }
   //     }
   //   }
-  const handlePopOver = () => {
+  const handlePopOver = (item: any) => {
     console.log("popver open");
+    setPrice(item.price)
+    setHeading(item.heading)
+    setDescription(item.description)
+    const imgUrls = item.images.filter((data: any) => data.uri !== "Emptyimage")
+      .map((data: any) => data.uri);
+    console.log("imgUrls", imgUrls);
+    setImgUrls(imgUrls)
     setIsVisible(!isVisible)
     setShowPopover(true)
   }
@@ -161,6 +193,12 @@ const CustomMap: React.FC = () => {
 
     setShowPopover(false)
   }
+  // const imgData = [
+  //   {uri:'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg'},
+  //   {uri:'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg'}
+  // ]
+
+
 
 
 
@@ -218,7 +256,7 @@ const CustomMap: React.FC = () => {
       </MapboxGL.MapView> */}
       <Map.MapView
         ref={mapRef} // Assign the mapRef to the MapView
-
+        styleURL='mapbox://styles/mapbox/streets-v12'
         style={styles.map}
         zoomEnabled={true}
         // styleURL="mapbox://styles/shopax/clmsvy6qp02ds01pj1tlke9je"
@@ -231,7 +269,7 @@ const CustomMap: React.FC = () => {
           animationDuration={6000}
         />
 
-{/* <Map.PointAnnotation
+        {/* <Map.PointAnnotation
           id="destinationPoint"
           coordinate={[75.88460359884049, 22.724585546072984]}
           onSelected={() => handlePopOver()}>
@@ -241,31 +279,61 @@ const CustomMap: React.FC = () => {
           </TouchableOpacity>
         </Map.PointAnnotation> */}
 
-       {data.map((item:any,index:any)=>(
-          <Map.PointAnnotation
-          id={`${index}`}
-          key={index}
-          coordinate={[item.coords.longitude, item.coords.latitude]}
-          onSelected={() => handlePopOver()}>
-          <TouchableOpacity style={styles.destinationIcon}>
-            <Ionicons name={item.iconname} size={24} color="#E1710A" />
+        {data.map((item: any, index: any) => {
+          return <Map.PointAnnotation
+            id={`${index}`}
+            key={index}
+            coordinate={[item.coords.longitude, item.coords.latitude]}
+            onSelected={() => handlePopOver(item)}>
+            <TouchableOpacity style={styles.destinationIcon}>
+              <Icon name={item.type === "home" ? "home-outline" : (item.type === "shop" ? "shopping-outline" : "office-building")
+              } size={24} color="#E1710A" />
 
-          </TouchableOpacity>
-        </Map.PointAnnotation>
-       ))}
+            </TouchableOpacity>
+           
+          </Map.PointAnnotation>
+        })}
       </Map.MapView>
 
-
       <Modal
-        visible={isVisible}
-        transparent>
-        <View style={{ flex: .8,  }}>
-          <TouchableOpacity onPress={() => setIsVisible(false)}>
-            <Text style={{color:'black'}}>Closeteetestttt</Text>
-          </TouchableOpacity>
-        </View>
+              visible={isVisible}
+              transparent
+              animationType='fade'
+              
+              >
+              <View style={styles.modalContainer}>
+                <View style={styles.flatlistContainer}>
+                  <View>
+                    <Text style={{color:'black'}}>{heading}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => setIsVisible(false)} style={{}}>
+                    <View>
+                      <Icon name='close' size={24} color="#fff" />
+                    </View>
+                  </TouchableOpacity>
+                  <SliderBox
+                    images={imgUrls}
+                    testID="imageSlider"
+                    // autoplay
+                    
+                    dotColor="#FFF"
+                    inactiveDotColor="#90A4AE"
+                    // autoplayInterval={3000}
+                    // circleLoop
+                    ImageComponentStyle={styles.imageStyle}
+                  />
+                  <View>
+                    <Text style={{color:'black'}}>Price----{price}</Text>
+                  </View>
+                  <View>
+                    <Text style={{color:'black'}}>Description : {description}</Text>
+                  </View>
 
-      </Modal>
+                </View>
+              </View>
+
+            </Modal>
+
     </View>
   );
 };
@@ -312,6 +380,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     zIndex: 1,
   },
+  flatlistContainer: {
+    top:100,
+    height: scaledSize(220),
+    justifyContent: "center",
+    // backgroundColor:'red',
+    alignItems: "center",
+    borderRadius: 12,
+    width: deviceWidth - 64,
+  },
   flatList: {
     position: 'absolute',
     bottom: 20,
@@ -319,6 +396,14 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'transparent',
     zIndex: 1,
+  },
+  imageStyle: {
+    width: deviceWidth - 64,
+    height: scaledSize(220),
+    resizeMode: "cover",
+    borderRadius: 12,
+    alignSelf: "center",
+    paddingHorizontal: 10,
   },
   routeProfileButton: {
     width: 80,
@@ -341,6 +426,15 @@ const styles = StyleSheet.create({
   },
   selectedRouteProfileButtonText: {
     color: 'white',
+  },
+  modalContainer:{
+    flex: 1,
+    justifyContent:'flex-start',
+    padding:scaledSize(20),
+    //backgroundColor: 'transparent',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+   backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
 });
 
