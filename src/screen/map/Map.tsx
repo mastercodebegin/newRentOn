@@ -1,8 +1,10 @@
 // import { useRoute } from '@react-navigation/native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, } from 'react';
 import { Alert, Modal, Platform } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, PermissionsAndroid } from 'react-native';
+import Color from '../../assets/colors/Color';
+import { Fonts } from '../../utilits/GlobalAssets'
 import Map, { Logger } from '@rnmapbox/maps';
 import UserLocation from '@rnmapbox/maps';
 import Ionicons from 'react-native-vector-icons/FontAwesome5'
@@ -13,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SliderBox } from "react-native-image-slider-box";
 import { deviceWidth, getUUIDV4, scaledSize } from '../../helper/util/Utilities';
+import CustomeButton from '../../helper/util/CustomeButton';
 
 
 
@@ -60,8 +63,8 @@ const CustomMap: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [imgUrls, setImgUrls] = useState([{}])
   const [price, setPrice] = useState('')
-  const [heading, setHeading ] = useState('')
-  const [description , setDescription] = useState('')
+  const [heading, setHeading] = useState('')
+  const [description, setDescription] = useState('')
 
   const APIKEY = "pk.eyJ1Ijoic2hvcGF4IiwiYSI6ImNsN3Zlc3IyYjAyYXEzd3BiamljNTlsNzEifQ.UKKhtejhtvJTtfzwQHa1XA";
   const [destinationCoords, setDestinationCoords] = useState<[number, number]>([
@@ -89,13 +92,21 @@ const CustomMap: React.FC = () => {
 
   }
 
-  const data = [{
-    name: 'first', coords: { longitude: 75.8867677, latitude: 22.6925421 }, type: "office", price: '2709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
+  const data = [
+  { name: 'first', coords: { longitude: 75.8867677, latitude: 22.6925421 }, type: "office", price: '2709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
     { uri: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg' }],
-    heading: 'available shop on plasia', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
   },
-  { name: 'Second', coords: { longitude: 75.88302286574294, latitude: 22.711779694040896 }, type: 'home' },
-  { name: 'third', coords: { longitude: 75.8846963870179, latitude: 22.72464600641459 }, type: 'shop' }]
+  { name: 'Second', coords: { longitude: 75.88302286574294, latitude: 22.711779694040896 }, type: 'home', price: '2709', images: [{ uri: 'https://i.pinimg.com/474x/24/15/77/241577b98e77e72fbfe9193ba5253180.jpg' },
+    { uri: 'https://i.pinimg.com/474x/62/b0/42/62b0420c2813074fcbf77173e2ddf98e.jpg' },
+    { uri: 'https://images.pexels.com/photos/40192/woman-happiness-sunrise-silhouette-40192.jpeg?auto=compress&cs=tinysrgb&w=800' }],
+    heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'},
+
+  { name: 'third', coords: { longitude: 75.8846963870179, latitude: 22.72464600641459 },price: '2709', type: 'shop',images:[{ uri:'https://images.unsplash.com/photo-1603788988770-92e7a1b2bea5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D'},
+    { uri:'https://images.unsplash.com/photo-1515138692129-197a2c608cfd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjN8fHxlbnwwfHx8fHw%3D'},
+    { uri:'https://images.unsplash.com/photo-1541348263662-e068662d82af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhcnN8ZW58MHx8MHx8fDA%3D'}],
+    heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'},
+  ]
 
   useEffect(() => {
 
@@ -290,49 +301,55 @@ const CustomMap: React.FC = () => {
               } size={24} color="#E1710A" />
 
             </TouchableOpacity>
-           
+
           </Map.PointAnnotation>
         })}
       </Map.MapView>
 
       <Modal
-              visible={isVisible}
-              transparent
-              animationType='fade'
-              
-              >
-              <View style={styles.modalContainer}>
-                <View style={styles.flatlistContainer}>
-                  <View>
-                    <Text style={{color:'black'}}>{heading}</Text>
-                  </View>
-                  <TouchableOpacity onPress={() => setIsVisible(false)} style={{}}>
-                    <View>
-                      <Icon name='close' size={24} color="#fff" />
-                    </View>
-                  </TouchableOpacity>
-                  <SliderBox
-                    images={imgUrls}
-                    testID="imageSlider"
-                    // autoplay
-                    
-                    dotColor="#FFF"
-                    inactiveDotColor="#90A4AE"
-                    // autoplayInterval={3000}
-                    // circleLoop
-                    ImageComponentStyle={styles.imageStyle}
-                  />
-                  <View>
-                    <Text style={{color:'black'}}>Price----{price}</Text>
-                  </View>
-                  <View>
-                    <Text style={{color:'black'}}>Description : {description}</Text>
-                  </View>
+        visible={isVisible}
+        transparent
+        animationType='fade'
 
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.flatlistContainer}>
+            <View style={{ flex: .08, justifyContent: 'space-evenly', flexDirection: 'row', backgroundColor: '#fafafa' }}>
+              <Text style={[styles.headingStyle, { top: scaledSize(15), left: scaledSize(-15) }]}>{heading}</Text>
+              <TouchableOpacity onPress={() => setIsVisible(false)} style={{}}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', left: scaledSize(10), top: scaledSize(10) }}>
+                  <Icon name='close' size={24} color='rgba(0, 0, 0, 0.5)' />
                 </View>
-              </View>
+              </TouchableOpacity>
+            </View>
 
-            </Modal>
+            <View style={{ flex: .5, padding: scaledSize(20), justifyContent: 'center', alignItems: 'center' }}>
+              <SliderBox
+                images={imgUrls}
+                testID="imageSlider"
+                // autoplay
+
+                dotColor="#FFF"
+                inactiveDotColor="#90A4AE"
+                // autoplayInterval={3000}
+                // circleLoop
+                ImageComponentStyle={styles.imageStyle}
+              />
+            </View>
+            <View style={{ flex: .09, backgroundColor: '#fafafa' }}>
+              <Text style={styles.headingStyle}>Price----{price}</Text>
+            </View>
+            <View style={{ flex: .2, backgroundColor: '#fafafa' }}>
+              <Text style={styles.headingStyle}>Description</Text><Text style={{ color: 'black', paddingLeft: scaledSize(10) }}>{description}</Text>
+            </View>
+            <View style={{ flex: .09 }}>
+              <CustomeButton name={'Close'} onPress={() => setIsVisible(false)} style={{ backgroundColor: Color.activeBorderColor, margin: scaledSize(10) }} />
+            </View>
+
+          </View>
+        </View>
+
+      </Modal>
 
     </View>
   );
@@ -381,13 +398,16 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   flatlistContainer: {
-    top:100,
-    height: scaledSize(220),
-    justifyContent: "center",
+    // top:100,
+    // padding:'1%',
+    // height: scaledSize(220),
+    // backgroundColor:'green',
+    flex: 1,
+    // justifyContent: "center",
     // backgroundColor:'red',
-    alignItems: "center",
+    // alignItems: "center",
     borderRadius: 12,
-    width: deviceWidth - 64,
+    // width: deviceWidth - 44,
   },
   flatList: {
     position: 'absolute',
@@ -398,13 +418,15 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   imageStyle: {
-    width: deviceWidth - 64,
-    height: scaledSize(220),
+    width: deviceWidth - 24,
+    height: '100%',
+    // height: scaledSize(220),
     resizeMode: "cover",
     borderRadius: 12,
     alignSelf: "center",
     paddingHorizontal: 10,
   },
+  headingStyle: { color: 'black', padding: scaledSize(10), fontFamily: Fonts.PTSerifBold, fontSize: 20, fontWeight: '600' },
   routeProfileButton: {
     width: 80,
     height: 80,
@@ -427,14 +449,15 @@ const styles = StyleSheet.create({
   selectedRouteProfileButtonText: {
     color: 'white',
   },
-  modalContainer:{
+  modalContainer: {
     flex: 1,
-    justifyContent:'flex-start',
-    padding:scaledSize(20),
+    justifyContent: 'flex-start',
+    // padding:scaledSize(20),
     //backgroundColor: 'transparent',
     // alignItems: 'center',
     // justifyContent: 'center',
-   backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: '#fafafa'
+    //  backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
 });
 
