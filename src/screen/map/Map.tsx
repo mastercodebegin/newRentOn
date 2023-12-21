@@ -1,28 +1,26 @@
 // import { useRoute } from '@react-navigation/native';
 import React, { useState, useEffect, useRef, } from 'react';
-import { Alert, Modal, Platform } from 'react-native';
+import { Modal, Platform} from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, PermissionsAndroid } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity,  Dimensions, PermissionsAndroid } from 'react-native';
 import Color from '../../assets/colors/Color';
 import { Fonts } from '../../utilits/GlobalAssets'
 import Map, { Logger } from '@rnmapbox/maps';
 import UserLocation from '@rnmapbox/maps';
-import Ionicons from 'react-native-vector-icons/FontAwesome5'
 import ColorfulCard from '@freakycoder/react-native-colorful-card';
 import Geolocation from '@react-native-community/geolocation';
-import Popover from "react-native-popover-view";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SliderBox } from "react-native-image-slider-box";
-import { deviceWidth, getUUIDV4, scaledSize } from '../../helper/util/Utilities';
+import { deviceWidth, scaledSize } from '../../helper/util/Utilities';
 import CustomeButton from '../../helper/util/CustomeButton';
+import CustomPopOver from '../../component/CustomPopOver';
 
 
 
 
 
 Map.setWellKnownTileServer('Mapbox')
-Map.setAccessToken("pk.eyJ1Ijoic2hvcGF4IiwiYSI6ImNsN3Zlc3IyYjAyYXEzd3BiamljNTlsNzEifQ.UKKhtejhtvJTtfzwQHa1XA");
+Map.setAccessToken("pk.eyJ1IjoiYWlqYXphbGkiLCJhIjoiY2xxZjRwdXhzMHMwdDJqcnE5N3F6MzVpYiJ9.kxNYoLU1pZh0QScDLmND4A");
 // MapboxGL.setConnected(true)
 Map.setTelemetryEnabled(false);
 
@@ -50,7 +48,7 @@ const routeProfiles = [
   { id: 'cycling', label: 'Cylcing', icon: 'bicycle' },
   { id: 'driving', label: 'Driving', icon: 'car' },
 ];
-// const [coords, setCoords] = useState<[number, number]>([75.88660222144553, 22.692505680540137]);
+
 
 const CustomMap: React.FC = () => {
   const [routeDirections, setRouteDirections] = useState<any | null>(null);
@@ -66,7 +64,7 @@ const CustomMap: React.FC = () => {
   const [heading, setHeading] = useState('')
   const [description, setDescription] = useState('')
 
-  const APIKEY = "pk.eyJ1Ijoic2hvcGF4IiwiYSI6ImNsN3Zlc3IyYjAyYXEzd3BiamljNTlsNzEifQ.UKKhtejhtvJTtfzwQHa1XA";
+  const APIKEY = "pk.eyJ1IjoiYWlqYXphbGkiLCJhIjoiY2xxZjRwdXhzMHMwdDJqcnE5N3F6MzVpYiJ9.kxNYoLU1pZh0QScDLmND4A";
   const [destinationCoords, setDestinationCoords] = useState<[number, number]>([
     75.89405463418585, 22.747417880919198,]);
   const [loading, setLoading] = useState(true);
@@ -77,8 +75,8 @@ const CustomMap: React.FC = () => {
   // const navigation = useNavigation<any>();
 
   // const {store} = route.params;
-
-  const insets = useSafeAreaInsets();
+  const [showPopover, setShowPopover] = useState(false);
+  
 
   async function getPermissionLocation() {
 
@@ -93,19 +91,24 @@ const CustomMap: React.FC = () => {
   }
 
   const data = [
-  { name: 'first', coords: { longitude: 75.8867677, latitude: 22.6925421 }, type: "office", price: '2709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
-    { uri: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg' }],
-    heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
-  },
-  { name: 'Second', coords: { longitude: 75.88302286574294, latitude: 22.711779694040896 }, type: 'home', price: '2709', images: [{ uri: 'https://i.pinimg.com/474x/24/15/77/241577b98e77e72fbfe9193ba5253180.jpg' },
-    { uri: 'https://i.pinimg.com/474x/62/b0/42/62b0420c2813074fcbf77173e2ddf98e.jpg' },
-    { uri: 'https://images.pexels.com/photos/40192/woman-happiness-sunrise-silhouette-40192.jpeg?auto=compress&cs=tinysrgb&w=800' }],
-    heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'},
+    {
+      id: 1,name: 'first', coords: { longitude: 75.8867677, latitude: 22.6925421 }, type: "office", price: '2709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
+      { uri: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg' }],
+      heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    },
+    {
+      id: 2,name: 'Second', coords: { longitude: 75.88302286574294, latitude: 22.711779694040896 }, type: 'home', price: '2709', images: [{ uri: 'https://i.pinimg.com/474x/24/15/77/241577b98e77e72fbfe9193ba5253180.jpg' },
+      { uri: 'https://i.pinimg.com/474x/62/b0/42/62b0420c2813074fcbf77173e2ddf98e.jpg' },
+      { uri: 'https://images.pexels.com/photos/40192/woman-happiness-sunrise-silhouette-40192.jpeg?auto=compress&cs=tinysrgb&w=800' }],
+      heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    },
 
-  { name: 'third', coords: { longitude: 75.8846963870179, latitude: 22.72464600641459 },price: '2709', type: 'shop',images:[{ uri:'https://images.unsplash.com/photo-1603788988770-92e7a1b2bea5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D'},
-    { uri:'https://images.unsplash.com/photo-1515138692129-197a2c608cfd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjN8fHxlbnwwfHx8fHw%3D'},
-    { uri:'https://images.unsplash.com/photo-1541348263662-e068662d82af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhcnN8ZW58MHx8MHx8fDA%3D'}],
-    heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'},
+    {
+      id: 3,name: 'third', coords: { longitude: 75.8846963870179, latitude: 22.72464600641459 }, price: '2709', type: 'shop', images: [{ uri: 'https://images.unsplash.com/photo-1603788988770-92e7a1b2bea5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D' },
+      { uri: 'https://images.unsplash.com/photo-1515138692129-197a2c608cfd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjN8fHxlbnwwfHx8fHw%3D' },
+      { uri: 'https://images.unsplash.com/photo-1541348263662-e068662d82af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhcnN8ZW58MHx8MHx8fDA%3D' }],
+      heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    },
   ]
 
   useEffect(() => {
@@ -114,8 +117,6 @@ const CustomMap: React.FC = () => {
     getPermissionLocation()
 
   }, [permissionGranted, reload])
-
-  const [showPopover, setShowPopover] = useState(false);
 
   // useEffect(() => {
   //   //console.log(store.longitude);
@@ -187,6 +188,8 @@ const CustomMap: React.FC = () => {
   //     }
   //     }
   //   }
+  const [selected, setSelected] = useState(0);
+  
   const handlePopOver = (item: any) => {
     console.log("popver open");
     setPrice(item.price)
@@ -196,23 +199,12 @@ const CustomMap: React.FC = () => {
       .map((data: any) => data.uri);
     console.log("imgUrls", imgUrls);
     setImgUrls(imgUrls)
+    // setSelected(item.id)
+    // setShowPopover(true)
     setIsVisible(!isVisible)
-    setShowPopover(true)
+    
   }
-  const handleClosePopOver = () => {
-    console.log("popOver close");
-
-    setShowPopover(false)
-  }
-  // const imgData = [
-  //   {uri:'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg'},
-  //   {uri:'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg'}
-  // ]
-
-
-
-
-
+  
   return (
     <View style={styles.container}>
       {/* <MapboxGL.MapView
@@ -270,6 +262,7 @@ const CustomMap: React.FC = () => {
         styleURL='mapbox://styles/mapbox/streets-v12'
         style={styles.map}
         zoomEnabled={true}
+        onPress={() => setSelected(0)}
         // styleURL="mapbox://styles/shopax/clmsvy6qp02ds01pj1tlke9je"
         rotateEnabled={true}
       >
@@ -280,27 +273,50 @@ const CustomMap: React.FC = () => {
           animationDuration={6000}
         />
 
-        {/* <Map.PointAnnotation
-          id="destinationPoint"
-          coordinate={[75.88460359884049, 22.724585546072984]}
-          onSelected={() => handlePopOver()}>
-          <TouchableOpacity style={styles.destinationIcon}>
-            <Ionicons name="storefront" size={24} color="#E1710A" />
+{/* {data.map((item: any, index: any) => {
+          return <Map.PointAnnotation
+            // id={`${index}`}
+            id={`${item.id}`}
+            key={index}
+            ref={mapRef}
+            coordinate={[item.coords.longitude, item.coords.latitude]}
+            onSelected={() => handlePopOver(item)}>
+            
+            <CustomPopOver
+      handleClosePopover={() => setShowPopover(false)}
+      // selected={selected}
+      from={(<TouchableOpacity style={styles.destinationIcon}>
+        <Icon name={item.type === "home" ? "home-outline" : (item.type === "shop" ? "shopping-outline" : "office-building")
+        } size={24} color="#E1710A" />
 
-          </TouchableOpacity>
-        </Map.PointAnnotation> */}
+      </TouchableOpacity>)}
+      isVisible={false}
+      touchable={mapRef}
+      data={item}
+      /> 
+
+          </Map.PointAnnotation>
+        })} */}
 
         {data.map((item: any, index: any) => {
           return <Map.PointAnnotation
-            id={`${index}`}
+            // id={`${index}`}
+            id={`${item.id}`}
             key={index}
+            ref={mapRef}
             coordinate={[item.coords.longitude, item.coords.latitude]}
-            onSelected={() => handlePopOver(item)}>
-            <TouchableOpacity style={styles.destinationIcon}>
+            onSelected={() => handlePopOver(item)}
+            >
+            <View style={{backgroundColor:'transparent',width:120,height:80,justifyContent:'center',alignItems:'center'}}>
+                <View style={{backgroundColor:'white',justifyContent:'center',alignItems:'center',borderRadius:scaledSize(10),width:scaledSize(100),height:scaledSize(50)}}>
+                <Text style={{color:'black'}}>{`Price${item.price}`}</Text>
+                  <Text style={{color:'black'}}>Show more...</Text>
+                </View>
               <Icon name={item.type === "home" ? "home-outline" : (item.type === "shop" ? "shopping-outline" : "office-building")
               } size={24} color="#E1710A" />
-
-            </TouchableOpacity>
+              </View>
+             
+              
 
           </Map.PointAnnotation>
         })}
@@ -328,18 +344,19 @@ const CustomMap: React.FC = () => {
                 images={imgUrls}
                 testID="imageSlider"
                 // autoplay
-
+                pagingEnabled={true}
                 dotColor="#FFF"
                 inactiveDotColor="#90A4AE"
+                
                 // autoplayInterval={3000}
                 // circleLoop
                 ImageComponentStyle={styles.imageStyle}
               />
             </View>
-            <View style={{ flex: .09, backgroundColor: '#fafafa' }}>
-              <Text style={styles.headingStyle}>Price----{price}</Text>
+            <View style={{ flex: .09, backgroundColor: '#fafafa',flexDirection:'row',alignItems:'center' }}>
+              <Text style={styles.headingStyle}>Price</Text><Text style={styles.priceStyle}>{price}</Text>
             </View>
-            <View style={{ flex: .2, backgroundColor: '#fafafa' }}>
+            <View style={{ flex: .2, backgroundColor: '#fafafa',borderTopWidth:scaledSize(5),borderTopColor:'#ededed' }}>
               <Text style={styles.headingStyle}>Description</Text><Text style={{ color: 'black', paddingLeft: scaledSize(10) }}>{description}</Text>
             </View>
             <View style={{ flex: .09 }}>
@@ -350,6 +367,8 @@ const CustomMap: React.FC = () => {
         </View>
 
       </Modal>
+
+      
 
     </View>
   );
@@ -426,7 +445,21 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingHorizontal: 10,
   },
-  headingStyle: { color: 'black', padding: scaledSize(10), fontFamily: Fonts.PTSerifBold, fontSize: 20, fontWeight: '600' },
+  headingStyle: {
+    color: 'black',
+    padding: scaledSize(10),
+    fontFamily: Fonts.PTSerifBold,
+    fontSize: 20,
+    fontWeight: '600'
+  },
+
+  priceStyle:{
+    color: 'black',
+    fontFamily:Fonts.PTSerifBold,
+    fontSize:scaledSize(18) ,
+    paddingLeft: scaledSize(10),
+  },
+  
   routeProfileButton: {
     width: 80,
     height: 80,
