@@ -6,8 +6,11 @@ import {
   ActivityIndicator,
   ImageBackground,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  PermissionsAndroid ,
+  Platform
 } from 'react-native'
+import Geolocation from '@react-native-community/geolocation';
 import { capitalizeFirstLetter, getUUIDV4, scaledSize, searchPlace } from '../../helper/util/Utilities';
 import { Theme } from '../../utilits/GlobalColors';
 import { Searchbar } from "react-native-paper"
@@ -60,6 +63,8 @@ const DashboardScreen = ({ navigation, route }) => {
     }, 1500);
   }
 
+
+
   useEffect(() => {
     setColorLoad(true)
     value()
@@ -75,6 +80,91 @@ const DashboardScreen = ({ navigation, route }) => {
     // console.log('data================================', data);
 
   })
+
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+
+  
+
+  useEffect(() => {
+    // Request location permissions
+    if (Platform.OS === 'android') {
+      requestAndroidLocationPermission();
+    } else {
+      requestiOSLocationPermission();
+    }
+
+
+
+    // Subscribe to location updates
+    const watchId = Geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation([longitude, latitude]);
+      },
+      (error) => console.error(error),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+
+    return () => {
+      // Clear location watch on component unmount
+      Geolocation.clearWatch(watchId);
+    };
+  }, []);
+
+  const requestAndroidLocationPermission = async () => {
+    
+    console.log('function =======dashboard');
+
+ const res = await PermissionsAndroid.requestMultiple([
+  PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+]);
+console.log('permission check dashboard--', res);
+
+Geolocation.getCurrentPosition(
+(position) => {
+  const { latitude, longitude } = position.coords;
+  console.log("location dashboard--",position);
+  
+  setUserLocation([longitude,latitude]);
+},
+(error) => console.error(error),
+{ enableHighAccuracy: true, distanceFilter:50}
+);
+
+
+};
+
+
+
+const requestiOSLocationPermission = async () => {
+  try {
+    const status = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+
+    if (status === RESULTS.DENIED) {
+      const result = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+
+      if (result === RESULTS.GRANTED) {
+        console.log('Location permission granted');
+      } else {
+        console.log('Location permission denied');
+      }
+    } else if (status === RESULTS.GRANTED) {
+      console.log('Location permission already granted');
+    } else {
+      console.log('Location permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
+
+
+
+  
+
+
 
 
   const renderItem3 = (item: any, index: number) => {

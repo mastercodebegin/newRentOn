@@ -4,6 +4,9 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need your location...</string>
+
 	<key>CFBundleDisplayName</key>
 	<string>shopAx</string>
 	<key>CFBundleExecutable</key>
