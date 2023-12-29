@@ -128,6 +128,8 @@ const CustomMap: React.FC = () => {
     ]);
     console.log('permission check--', res);
 
+    
+
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -166,9 +168,6 @@ const CustomMap: React.FC = () => {
   };
 
 
-
-
-
   const data = [
     {
       id: 1, name: 'first', coords: { longitude: 75.8867677, latitude: 22.6925421 }, type: "office", price: '2709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
@@ -200,6 +199,27 @@ const CustomMap: React.FC = () => {
       { uri: 'https://images.unsplash.com/photo-1515138692129-197a2c608cfd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjN8fHxlbnwwfHx8fHw%3D' },
       { uri: 'https://images.unsplash.com/photo-1541348263662-e068662d82af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhcnN8ZW58MHx8MHx8fDA%3D' }],
       heading: 'Available Shops on plasiya', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    },
+    {
+      id: 6, name: 'third', coords: { longitude: 75.85581496745195, latitude: 22.718586100645275 }, price: '12800', type: 'shop', images: [{ uri: 'https://images.unsplash.com/photo-1603788988770-92e7a1b2bea5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D' },
+      { uri: 'https://images.unsplash.com/photo-1515138692129-197a2c608cfd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjN8fHxlbnwwfHx8fHw%3D' },
+      { uri: 'https://images.unsplash.com/photo-1541348263662-e068662d82af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhcnN8ZW58MHx8MHx8fDA%3D' }],
+      heading: 'Available Shops on Rajwada', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    },
+    {
+      id: 7, name: 'third', coords: { longitude: 75.86171231304752, latitude: 22.720971800664653 }, price: '14300', type: 'shop', images: [{ uri: 'https://images.unsplash.com/photo-1603788988770-92e7a1b2bea5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTB8fHxlbnwwfHx8fHw%3D' },
+      { uri: 'https://images.unsplash.com/photo-1515138692129-197a2c608cfd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjN8fHxlbnwwfHx8fHw%3D' },
+      { uri: 'https://images.unsplash.com/photo-1541348263662-e068662d82af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhcnN8ZW58MHx8MHx8fDA%3D' }],
+      heading: 'Available Shops on Jail-Road', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    },
+    {
+      id: 8, name: 'first', coords: { longitude: 75.87482493034757, latitude: 22.725238773370126 }, type: "office", price: '15709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
+      { uri: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg' }],
+      heading: 'Available Offices on High-Court', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
+    },{
+      id: 9, name: 'first', coords: { longitude: 75.89009540775207, latitude: 22.734094220808956 }, type: "office", price: '2709', images: [{ uri: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg' },
+      { uri: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg' }],
+      heading: 'Available Offices on LIG', description: 'There are multiple matches for plasia, including a word-forming element in biology and medicine and a suburb of Indore.'
     },
   ]
 
@@ -382,19 +402,19 @@ const CustomMap: React.FC = () => {
             </View>
           </MapboxGL.PointAnnotation>
         )}
-        <MapboxGL.UserLocation
-        visible={true}
-        onUpdate={(location) => {
-          const { latitude, longitude } = location;
-          // Update the map with the new location
-          if (mapRef.current) {
-            mapRef.current.setCamera({
-              centerCoordinate: [longitude, latitude],
-              zoom: 15,
-            });
-          }
-        }}
-      />
+      <MapboxGL.UserLocation
+      visible={true}
+      onUpdate={(location) => {
+        const { latitude, longitude } = location;
+        // Update the map with the new location
+        if (mapRef.current) {
+          mapRef.current.setCamera({
+            centerCoordinate: [longitude, latitude],
+            zoom: 15,
+          });
+        }
+      }}
+    />
       </MapboxGL.MapView> */}
       <Map.MapView
         ref={(mapRef) => {
@@ -407,13 +427,7 @@ const CustomMap: React.FC = () => {
         // styleURL="mapbox://styles/shopax/clmsvy6qp02ds01pj1tlke9je"
         rotateEnabled={true}
       >
-        {/* <Map.Camera
-          zoomLevel={14}
-          centerCoordinate={[75.88600432946546, 22.696400141312875]}
-          animationMode={'flyTo'}
-          animationDuration={6000}
-        /> */}
-
+      
         <Map.Camera
           zoomLevel={14}
           ref={cameraRef}
@@ -431,32 +445,6 @@ const CustomMap: React.FC = () => {
   }}
 /> */}
 
-
-        {/* {data.map((item: any, index: any) => {
-          return <Map.PointAnnotation
-            // id={`${index}`}
-            id={`${item.id}`}
-            key={index}
-            ref={mapRef}
-            coordinate={[item.coords.longitude, item.coords.latitude]}
-            onSelected={() => handlePopOver(item)}>
-            
-            <CustomPopOver
-      handleClosePopover={() => setShowPopover(false)}
-      // selected={selected}
-      from={(<TouchableOpacity style={styles.destinationIcon}>
-        <Icon name={item.type === "home" ? "home-outline" : (item.type === "shop" ? "shopping-outline" : "office-building")
-        } size={24} color="#E1710A" />
-
-      </TouchableOpacity>)}
-      isVisible={false}
-      touchable={mapRef}
-      data={item}
-      /> 
-
-          </Map.PointAnnotation>
-        })} */}
-
         {selectedFilter ? filteredData.map((item: any, index: any) => {
           return <Map.PointAnnotation
             // id={`${index}`}
@@ -473,7 +461,7 @@ const CustomMap: React.FC = () => {
                 <View style={[styles.triangle, styles.arrowDown]}></View>
               </View>
               {IconName ?<Icon name={IconName} size={24} color="#E1710A" />:null}
-              {/* <Icon name={selectedFilter === "home" ? "home-outline" : (selectedFilter === "shop" ? "shopping-outline" : "office-building")
+              {/* <Icon name={item?.type === "home" ? "home-outline" : (item?.type === "shop" ? "shopping-outline" : "office-building")
               } size={24} color="#E1710A" /> */}
             </View>
           </Map.PointAnnotation>
@@ -601,8 +589,6 @@ const CustomMap: React.FC = () => {
 
       </Modal>
 
-
-
     </View>
   );
 };
@@ -613,9 +599,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   map: {
     flex: 1,
   },
+
   backButton: {
     position: 'absolute',
     top: 20,
@@ -650,14 +638,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  // helloContainer: {
-  //   position: 'absolute',
-  //   bottom: 20,
-  //   right: 20,
-  //   // backgroundColor: 'rgba(255, 255, 255, 0.8)',
-  //   borderRadius: 8,
-  //   padding: 8,
-  // },
   helloText: {
     color: 'black',
     fontSize: 16,
@@ -678,6 +658,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'red',
     borderLeftColor: 'transparent',
   },
+
   arrowDown: {
     borderTopWidth: 15,
     borderRightWidth: 15,
@@ -689,30 +670,35 @@ const styles = StyleSheet.create({
     borderLeftColor: 'transparent',
     top: 5
   },
+
   loadingIndicator: {
     position: 'absolute',
     top: '50%',
     left: '50%',
     zIndex: 2,
   },
+
   cardContainer: {
     position: 'absolute',
     top: 20,
     right: 20,
     zIndex: 1,
   },
+
   destinationIcon: {
     width: 250,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   routeProfileList: {
     paddingVertical: 10,
     paddingHorizontal: 10,
     backgroundColor: 'transparent',
     zIndex: 1,
   },
+
   flatlistContainer: {
     // top:100,
     // padding:'1%',
@@ -725,6 +711,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     // width: deviceWidth - 44,
   },
+
   flatList: {
     position: 'absolute',
     bottom: 20,
@@ -733,6 +720,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     zIndex: 1,
   },
+
   imageStyle: {
     width: deviceWidth - 24,
     height: '100%',
@@ -742,6 +730,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingHorizontal: 10,
   },
+
   headingStyle: {
     color: 'black',
     padding: scaledSize(10),
@@ -768,17 +757,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
+
   selectedRouteProfileButton: {
     backgroundColor: '#FA9E14',
     borderColor: '#FA9E14',
   },
+
   routeProfileButtonText: {
     color: '#fff',
     marginTop: 5,
   },
+
   selectedRouteProfileButtonText: {
     color: 'white',
   },
+
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -789,6 +782,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa'
     //  backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
+
 });
 
 export default CustomMap;
