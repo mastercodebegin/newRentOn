@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, Image, View, StatusBar, Keyboard } from "react-native"
 // import Dashboard from "../screen/dashboard/dasboard"
-import Dashboard from '../screen/dashboard/DashboardR'
+import Dashboard from '../screen/dashboard/dasboard'
 import Profile from "../screen/profile/Profile"
 import CartScreen from "../screen/cart/Cart"
 import createDrawerNavigator from '@react-navigation/drawer'

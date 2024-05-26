@@ -13,7 +13,7 @@ import {
 import { CustomDrawer } from "../component/CustomDrawer";
 import Icon from "react-native-vector-icons/FontAwesome";
 // import Dashboard from "../screen/dashboard/Dasboard"
-import Dashboard from '../screen/dashboard/DashboardR';
+import Dashboard from '../screen/dashboard/Dashboard';
 import { scaledSize } from "../helper/util/Utilities";
 import BottomTabNavigator from "./BottomTabNavigator";
 //local imports
